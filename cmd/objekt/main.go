@@ -6,7 +6,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"github.com/julienschmidt/httprouter"
-	"github.com/rs/zerolog/log"
+	"go.prajeen.com/objekt/internal/logger"
 )
 
 type CLI struct {
@@ -20,10 +20,11 @@ func main() {
 
 	router := httprouter.New()
 	router.GET("/objekt", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		logger.Get().Debug().Msg("Received request to /objekt")
 		fmt.Fprint(w, "Objekt Server")
 	})
 
 	listener := fmt.Sprintf("%s:%d", cli.Hostname, cli.Port)
-	log.Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
-	log.Fatal().Err(http.ListenAndServe(listener, router)).Msg("Objekt server closed")
+	logger.Get().Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
+	logger.Get().Fatal().Err(http.ListenAndServe(listener, router)).Msg("Objekt server closed")
 }
