@@ -12,13 +12,16 @@ import (
 func main() {
 	cliConfig := config.Parse()
 
+	logConfig := &logger.Config{Level: cliConfig.LogLevel}
+	log := logConfig.Get()
+
 	router := httprouter.New()
 	router.GET("/objekt", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		logger.Get().Debug().Msg("Received request to /objekt")
+		log.Debug().Msg("Received request to /objekt")
 		fmt.Fprint(w, "Objekt Server")
 	})
 
 	listener := fmt.Sprintf("%s:%d", cliConfig.Hostname, cliConfig.Port)
-	logger.Get().Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
-	logger.Get().Fatal().Err(http.ListenAndServe(listener, router)).Msg("Objekt server closed")
+	log.Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
+	log.Fatal().Err(http.ListenAndServe(listener, router)).Msg("Objekt server closed")
 }

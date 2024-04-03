@@ -13,7 +13,11 @@ import (
 var once sync.Once
 var log zerolog.Logger
 
-func Get() *zerolog.Logger {
+type Config struct {
+	Level zerolog.Level
+}
+
+func (c *Config) Get() *zerolog.Logger {
 	once.Do(func() {
 		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 		zerolog.TimeFieldFormat = time.RFC3339Nano
@@ -36,6 +40,7 @@ func Get() *zerolog.Logger {
 		}
 
 		log = zerolog.New(output).
+			Level(c.Level).
 			With().
 			Timestamp().
 			Str("git_revision", gitRevision).
