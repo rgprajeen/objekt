@@ -6,6 +6,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"github.com/julienschmidt/httprouter"
+	"github.com/rs/zerolog/log"
 )
 
 type CLI struct {
@@ -23,6 +24,6 @@ func main() {
 	})
 
 	listener := fmt.Sprintf("%s:%d", cli.Hostname, cli.Port)
-	fmt.Printf("Starting Objekt Server on http://%s\n", listener)
-	http.ListenAndServe(listener, router)
+	log.Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
+	log.Fatal().Err(http.ListenAndServe(listener, router)).Msg("Objekt server closed")
 }
