@@ -23,6 +23,15 @@ type createBucketRequest struct {
 	Region string            `json:"region"`
 }
 
+func (h *BucketHandler) GetRouter() *httprouter.Router {
+	router := httprouter.New()
+	router.GET("/buckets", h.ListBuckets)
+	router.POST("/buckets", h.CreateBucket)
+	router.GET("/buckets/:id", h.GetBucket)
+	router.DELETE("/buckets/:id", h.DeleteBucket)
+	return router
+}
+
 func (h *BucketHandler) CreateBucket(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	var requestBody createBucketRequest
 	err := json.NewDecoder(r.Body).Decode(&requestBody)

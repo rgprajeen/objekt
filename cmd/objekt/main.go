@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	ohttp "go.prajeen.com/objekt/internal/adapter/http"
+	"go.prajeen.com/objekt/internal/adapter/storage/memory/repository"
 	"go.prajeen.com/objekt/internal/config"
+	"go.prajeen.com/objekt/internal/core/service"
 	"go.prajeen.com/objekt/internal/logger"
 )
 
@@ -15,13 +17,11 @@ func main() {
 	logConfig := &logger.Config{Level: cliConfig.LogLevel}
 	log := logConfig.Get()
 
-	router := httprouter.New()
-	router.GET("/objekt", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		log.Debug().Msg("Received request to /objekt")
-		fmt.Fprint(w, "Objekt Server")
-	})
+	repo := repository.NewBucketRespository()
+	svc := service.NewBucketService(repo)
+	handler := ohttp.NewBucketHandler(svc)
 
 	listener := fmt.Sprintf("%s:%d", cliConfig.Hostname, cliConfig.Port)
 	log.Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
-	log.Fatal().Err(http.ListenAndServe(listener, router)).Msg("Objekt server closed")
+	log.Fatal().Err(http.ListenAndServe(listener, handler.GetRouter())).Msg("Objekt server closed")
 }
