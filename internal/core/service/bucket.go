@@ -27,8 +27,8 @@ func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket)
 		return nil, errors.New("bucket name is invalid")
 	}
 
-	bucket, _ = s.repo.GetBucketByName(ctx, bucket.Name)
-	if bucket != nil {
+	b, _ := s.repo.GetBucketByName(ctx, bucket.Name)
+	if b != nil {
 		return nil, errors.New("bucket already exists")
 	}
 
