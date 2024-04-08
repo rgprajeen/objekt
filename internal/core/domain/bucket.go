@@ -6,14 +6,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type BucketType int
-
-const (
-	AWS BucketType = iota
-	Azure
-	OCI
-)
-
 type Bucket struct {
 	Name      string
 	Region    string
