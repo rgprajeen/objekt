@@ -30,8 +30,8 @@ func (b *BucketRepository) CreateBucket(ctx context.Context, bucket *domain.Buck
 		Region:    bucket.Region,
 		Type:      bucket.Type,
 		ID:        uuid.New(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
 	}
 	b.m.Store(preparedBucket.ID, preparedBucket)
 	return preparedBucket, nil

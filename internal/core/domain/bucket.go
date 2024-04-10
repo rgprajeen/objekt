@@ -7,10 +7,10 @@ import (
 )
 
 type Bucket struct {
-	Name      string
-	Region    string
-	Type      BucketType
-	ID        uuid.UUID
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Name      string       `json:"name"`
+	Region    BucketRegion `json:"region"`
+	Type      BucketType   `json:"type"`
+	ID        uuid.UUID    `json:"id"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt time.Time    `json:"updated_at"`
 }

@@ -20,9 +20,9 @@ func NewBucketHandler(log *zerolog.Logger, svc port.BucketService) *BucketHandle
 }
 
 type createBucketRequest struct {
-	Name   string            `json:"name"`
-	Type   domain.BucketType `json:"type"`
-	Region string            `json:"region"`
+	Name   string              `json:"name"`
+	Type   domain.BucketType   `json:"type"`
+	Region domain.BucketRegion `json:"region"`
 }
 
 func (h *BucketHandler) GetRouter() *httprouter.Router {
