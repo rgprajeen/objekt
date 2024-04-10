@@ -8,7 +8,8 @@ import (
 type BucketRegion int
 
 const (
-	Ashburn BucketRegion = iota
+	InvalidRegion BucketRegion = iota
+	Ashburn
 	Frankfurt
 	London
 	Phoenix

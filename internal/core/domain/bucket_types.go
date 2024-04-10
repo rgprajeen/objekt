@@ -8,7 +8,8 @@ import (
 type BucketType int
 
 const (
-	AWS BucketType = iota
+	InvalidType BucketType = iota
+	AWS
 	Azure
 	OCI
 )
