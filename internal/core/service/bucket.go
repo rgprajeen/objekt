@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
+	"regexp"
 
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
@@ -17,6 +17,8 @@ type BucketService struct {
 	repo port.BucketRepository
 }
 
+var validBucketNameRegex = regexp.MustCompile(`^[a-zA-Z]([_-]?[a-zA-Z0-9]{1,})*$`)
+
 // interface guard
 var _ port.BucketService = (*BucketService)(nil)
 
@@ -25,7 +27,7 @@ func NewBucketService(log *zerolog.Logger, repo port.BucketRepository) *BucketSe
 }
 
 func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket) (*domain.Bucket, error) {
-	if isNameInvalid(bucket.Name) {
+	if !validBucketNameRegex.MatchString(bucket.Name) {
 		s.log.Error().Str("bucket_name", bucket.Name).Msg("invalid bucket name")
 		return nil, errors.New("bucket name is invalid")
 	}
@@ -67,8 +69,4 @@ func (s *BucketService) DeleteBucket(ctx context.Context, id string) error {
 	}
 
 	return s.repo.DeleteBucket(ctx, bucketID)
-}
-
-func isNameInvalid(name string) bool {
-	return len(name) == 0 || strings.ContainsAny(name, " /_\\$%^&*()+=[]{}|;:'\",<>?`~")
 }
