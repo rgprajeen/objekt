@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	ohttp "go.prajeen.com/objekt/internal/adapter/http"
+	obj_http "go.prajeen.com/objekt/internal/adapter/http"
 	"go.prajeen.com/objekt/internal/adapter/storage/memory/repository"
 	"go.prajeen.com/objekt/internal/config"
 	"go.prajeen.com/objekt/internal/core/service"
@@ -18,8 +18,8 @@ func main() {
 	log := logConfig.Get()
 
 	repo := repository.NewBucketRespository()
-	svc := service.NewBucketService(repo)
-	handler := ohttp.NewBucketHandler(svc)
+	svc := service.NewBucketService(log, repo)
+	handler := obj_http.NewBucketHandler(log, svc)
 
 	listener := fmt.Sprintf("%s:%d", cliConfig.Hostname, cliConfig.Port)
 	log.Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
