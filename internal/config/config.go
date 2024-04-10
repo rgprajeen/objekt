@@ -15,7 +15,8 @@ func Parse() *GlobalConfig {
 	gc := &GlobalConfig{}
 	kong.Parse(gc,
 		kong.Name("objekt"),
-		kong.Description("Objekt is a simple HTTP server"),
+		kong.Description("A object storage facade for the modern cloud"),
+		kong.DefaultEnvars("OBJEKT"),
 		kong.Configuration(kong.JSON, "/etc/objekt/config.json", "~/.objekt/config.json", ".objekt.json"),
 		kong.UsageOnError())
 	return gc
