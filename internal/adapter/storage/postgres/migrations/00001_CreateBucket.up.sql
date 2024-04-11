@@ -3,12 +3,12 @@ create type bucket_region_enum as enum ('ashburn', 'frankfurt', 'london', 'phoen
 
 create table bucket (
   id bigserial primary key,
-  public_id uuid not null default uuid_generate_v4(),
+  public_id uuid not null default (uuid_generate_v4()),
   name text not null,
   region bucket_region_enum not null,
   type bucket_type_enum not null,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  created_at timestamptz not null default (now()),
+  updated_at timestamptz not null default (now())
 );
 
 create unique index bucket_public_id_uindex on bucket (public_id);

@@ -3,6 +3,7 @@ package domain
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 )
 
 type BucketType int
@@ -47,5 +48,26 @@ func (bt *BucketType) UnmarshalJSON(b []byte) error {
 	}
 	// Note that if the string cannot be found then it will be set to the zero value, 'AWS' in this case.
 	*bt = typeToID[j]
+	return nil
+}
+
+func (bt BucketType) Value() (string, error) {
+	if bt == InvalidType {
+		return "", errors.New("invalid bucket type")
+	}
+	return typeToString[bt], nil
+}
+
+func (bt *BucketType) Scan(value any) error {
+	switch value := value.(type) {
+	case string:
+		*bt = typeToID[value]
+	case []byte:
+		*bt = typeToID[string(value)]
+	case int:
+		*bt = BucketType(value)
+	default:
+		return errors.New("incompatible type for BucketType")
+	}
 	return nil
 }

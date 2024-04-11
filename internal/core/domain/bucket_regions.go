@@ -3,6 +3,7 @@ package domain
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 )
 
 type BucketRegion int
@@ -56,5 +57,26 @@ func (br *BucketRegion) UnmarshalJSON(b []byte) error {
 	}
 	// Note that if the string cannot be found then it will be set to the zero value, 'AWS' in this case.
 	*br = regionToID[j]
+	return nil
+}
+
+func (br BucketRegion) Value() (string, error) {
+	if br == InvalidRegion {
+		return "", errors.New("invalid bucket region")
+	}
+	return regionToString[br], nil
+}
+
+func (br *BucketRegion) Scan(value any) error {
+	switch value := value.(type) {
+	case string:
+		*br = regionToID[value]
+	case []byte:
+		*br = regionToID[string(value)]
+	case int:
+		*br = BucketRegion(value)
+	default:
+		return errors.New("incompatible type for BucketRegion")
+	}
 	return nil
 }
