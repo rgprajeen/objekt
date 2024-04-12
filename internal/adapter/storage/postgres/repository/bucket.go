@@ -25,8 +25,8 @@ func (b *BucketRepository) CreateBucket(ctx context.Context, bucket *domain.Buck
 	if err != nil {
 		return nil, err
 	}
-	row := b.db.Pool.QueryRow(ctx, "INSERT INTO bucket (name, type, region) VALUES ($1, $2, $3) RETURNING public_id, created_at, updated_at", bucket.Name, bucket.Type, bucket.Region)
 
+	row := tx.QueryRow(ctx, "INSERT INTO bucket (name, type, region) VALUES ($1, $2, $3) RETURNING public_id, created_at, updated_at", bucket.Name, bucket.Type, bucket.Region)
 	dbBucket := &domain.Bucket{
 		Name:   bucket.Name,
 		Type:   bucket.Type,
@@ -37,6 +37,7 @@ func (b *BucketRepository) CreateBucket(ctx context.Context, bucket *domain.Buck
 		err = tx.Rollback(ctx)
 		return nil, err
 	}
+
 	err = tx.Commit(ctx)
 	if err != nil {
 		return nil, err
@@ -49,7 +50,7 @@ func (b *BucketRepository) DeleteBucket(ctx context.Context, id uuid.UUID) error
 	if err != nil {
 		return err
 	}
-	_, err = b.db.Pool.Exec(ctx, "DELETE FROM bucket WHERE public_id = $1", id)
+	_, err = tx.Exec(ctx, "DELETE FROM bucket WHERE public_id = $1", id)
 	if err != nil {
 		err = tx.Rollback(ctx)
 		return err
