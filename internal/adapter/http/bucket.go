@@ -57,6 +57,7 @@ func (h *BucketHandler) CreateBucket(w http.ResponseWriter, r *http.Request, p h
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "application/json")
 	if err = json.NewEncoder(w).Encode(bucket); err != nil {
 		h.log.Err(err).Msg("failed to encode CreateBucket response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -72,6 +73,7 @@ func (h *BucketHandler) GetBucket(w http.ResponseWriter, r *http.Request, p http
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	if err = json.NewEncoder(w).Encode(bucket); err != nil {
 		h.log.Err(err).Msg("failed to encode GetBucket response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -86,6 +88,7 @@ func (h *BucketHandler) ListBuckets(w http.ResponseWriter, r *http.Request, _ ht
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	if err = json.NewEncoder(w).Encode(buckets); err != nil {
 		h.log.Err(err).Msg("failed to encode ListBuckets response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
