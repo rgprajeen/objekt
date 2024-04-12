@@ -7,8 +7,8 @@ create table bucket (
   name text not null,
   region bucket_region_enum not null,
   type bucket_type_enum not null,
-  created_at timestamptz not null default (now()),
-  updated_at timestamptz not null default (now())
+  created_at timestamp not null default (now()),
+  updated_at timestamp not null default (now())
 );
 
 create unique index bucket_public_id_uindex on bucket (public_id);
