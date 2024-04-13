@@ -39,10 +39,10 @@ func (b *BucketRepository) CreateBucket(ctx context.Context, bucket *domain.Buck
 
 func (b *BucketRepository) GetBucketByID(ctx context.Context, id uuid.UUID) (*domain.Bucket, error) {
 	bucket, ok := b.m.Load(id)
-	if ok {
-		return bucket.(*domain.Bucket), nil
+	if !ok {
+		return nil, fmt.Errorf("bucket with id=%s doesn't exist", id.String())
 	}
-	return nil, fmt.Errorf("bucket with id=%s doesn't exist", id.String())
+	return bucket.(*domain.Bucket), nil
 }
 
 func (b *BucketRepository) GetBucketByName(ctx context.Context, name string) (*domain.Bucket, error) {
@@ -72,9 +72,9 @@ func (b *BucketRepository) ListBuckets(ctx context.Context) ([]domain.Bucket, er
 
 func (b *BucketRepository) DeleteBucket(ctx context.Context, id uuid.UUID) error {
 	_, ok := b.m.Load(id)
-	if ok {
-		b.m.Delete(id)
-		return nil
+	if !ok {
+		return fmt.Errorf("bucket with id=%s doesn't exist", id.String())
 	}
-	return fmt.Errorf("bucket with id=%s doesn't exist", id.String())
+	b.m.Delete(id)
+	return nil
 }
