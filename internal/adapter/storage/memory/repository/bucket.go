@@ -15,7 +15,7 @@ type BucketRepository struct {
 	m sync.Map
 }
 
-func NewBucketRespository() *BucketRepository {
+func NewBucketRepository() *BucketRepository {
 	return &BucketRepository{
 		m: sync.Map{},
 	}
