@@ -8,7 +8,7 @@ import (
 type GlobalConfig struct {
 	Hostname string        `help:"Hostname of the Objekt server" default:"localhost" short:"H"`
 	Port     int           `help:"Port of the Objekt server" default:"8080" short:"p"`
-	LogLevel zerolog.Level `help:"Log level" default:"info" short:"l"`
+	LogLevel zerolog.Level `help:"Log level" enum:"debug,error,fatal,info,panic,warn" default:"info" short:"l"`
 	DB       DBConfig      `embed:"" prefix:"db."`
 }
 

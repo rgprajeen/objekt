@@ -10,9 +10,9 @@ type DBConfig struct {
 	Port             int               `help:"Database connection port" required:""`
 	User             string            `help:"Database user" required:""`
 	Password         string            `help:"Database password" required:""`
-	Driver           string            `help:"Database driver to be used" required:""`
+	Driver           string            `help:"Database driver to be used" enum:"postgres" default:"postgres" required:""`
 	Name             string            `help:"Database name" required:""`
-	AdditionalConfig map[string]string `help:"Additional database connection string query params" optional:""`
+	AdditionalConfig map[string]string `help:"Additional database connection string query params"`
 }
 
 func (d *DBConfig) ConnectionURL() string {
