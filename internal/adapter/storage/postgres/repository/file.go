@@ -78,6 +78,18 @@ func (f *FileRepository) GetFileByID(ctx context.Context, id uuid.UUID) (*domain
 	return &file, nil
 }
 
+func (f *FileRepository) GetFileByName(ctx context.Context, name string, bucketID uuid.UUID) (*domain.File, error) {
+	row := f.db.Pool.QueryRow(ctx,
+		"SELECT f.public_id, f.name, f.size, f.mime_type, b.name, f.created_at, f.updated_at FROM file f, bucket b WHERE f.name = $1 AND f.bucket_id = b.id AND b.public_id = $2",
+		name, bucketID)
+	var file domain.File
+	err := row.Scan(&file.ID, &file.Name, &file.Size, &file.MimeType, &file.BucketName, &file.CreatedAt, &file.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &file, nil
+}
+
 func (f *FileRepository) GetFilesByBucketID(ctx context.Context, bucketID uuid.UUID) ([]domain.File, error) {
 	rows, err := f.db.Pool.Query(ctx,
 		"SELECT f.public_id, f.name, f.size, f.mime_type, b.name, f.created_at, f.updated_at FROM file f, bucket b WHERE b.id = f.bucket_id AND b.public_id = $1", bucketID)

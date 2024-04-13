@@ -49,21 +49,14 @@ func (f *FileService) CreateFile(ctx context.Context, file *domain.File) (*domai
 		return nil, fmt.Errorf("failed to get bucket: %w", err)
 	}
 
-	files, err := f.fileRepo.GetFilesByBucketID(ctx, bucket.ID)
-	if err != nil {
-		f.log.Err(err).Str("bucket_name", bucketName).Msg("failed to get files from bucket")
-		return nil, fmt.Errorf("failed to get files: %w", err)
-	}
-
-	for _, v := range files {
-		if v.Name == file.Name {
-			if file.IsIdentical(&v) {
-				f.log.Debug().Str("file_name", file.Name).Str("bucket_name", bucketName).Msg("duplicate file creation attempted")
-				return &v, nil
-			}
-			f.log.Error().Str("file_name", file.Name).Str("bucket_name", bucketName).Msg("file already exists in bucket")
-			return nil, fmt.Errorf("file with name %s already exists in bucket %s", file.Name, bucketName)
+	dbFile, _ := f.fileRepo.GetFileByName(ctx, file.Name, bucket.ID)
+	if dbFile != nil {
+		if dbFile.IsIdentical(file) {
+			f.log.Debug().Str("file_name", file.Name).Str("bucket_name", bucketName).Msg("duplicate file creation attempted")
+			return dbFile, nil
 		}
+		f.log.Error().Str("file_name", file.Name).Str("bucket_name", bucketName).Msg("file already exists")
+		return nil, fmt.Errorf("file with name %s already exists in bucket %s", file.Name, bucket.Name)
 	}
 
 	return f.fileRepo.CreateFile(ctx, file)

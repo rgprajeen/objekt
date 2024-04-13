@@ -57,6 +57,26 @@ func (f *FileRepository) GetFileByID(ctx context.Context, id uuid.UUID) (*domain
 	return file.(*domain.File), nil
 }
 
+func (f *FileRepository) GetFileByName(ctx context.Context, name string, bucketID uuid.UUID) (*domain.File, error) {
+	b, err := f.br.GetBucketByID(ctx, bucketID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get bucket: %w", err)
+	}
+	var file *domain.File
+	f.m.Range(func(key, value any) bool {
+		v := value.(*domain.File)
+		if v.Name == name && v.BucketName == b.Name {
+			file = v
+			return false
+		}
+		return true
+	})
+	if file == nil {
+		return nil, fmt.Errorf("file with name=%s doesn't exist", name)
+	}
+	return file, nil
+}
+
 func (f *FileRepository) GetFilesByBucketID(ctx context.Context, bucketID uuid.UUID) ([]domain.File, error) {
 	files := make([]domain.File, 0)
 	b, err := f.br.GetBucketByID(ctx, bucketID)
