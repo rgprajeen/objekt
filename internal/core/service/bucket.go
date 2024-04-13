@@ -34,6 +34,10 @@ func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket)
 
 	b, _ := s.repo.GetBucketByName(ctx, bucket.Name)
 	if b != nil {
+		if b.IsIdentical(bucket) {
+			s.log.Debug().Str("bucket_name", bucket.Name).Msg("duplicate bucket creation attempted")
+			return b, nil
+		}
 		s.log.Error().Str("bucket_name", bucket.Name).Msg("bucket already exists")
 		return nil, errors.New("bucket already exists")
 	}

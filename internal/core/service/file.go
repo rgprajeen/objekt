@@ -57,6 +57,10 @@ func (f *FileService) CreateFile(ctx context.Context, file *domain.File) (*domai
 
 	for _, v := range files {
 		if v.Name == file.Name {
+			if file.IsIdentical(&v) {
+				f.log.Debug().Str("file_name", file.Name).Str("bucket_name", bucketName).Msg("duplicate file creation attempted")
+				return &v, nil
+			}
 			f.log.Error().Str("file_name", file.Name).Str("bucket_name", bucketName).Msg("file already exists in bucket")
 			return nil, fmt.Errorf("file with name %s already exists in bucket %s", file.Name, bucketName)
 		}
