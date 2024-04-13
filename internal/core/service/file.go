@@ -15,7 +15,7 @@ type FileService struct {
 	fileRepo   port.FileRepository
 }
 
-var validFileNameRegex = regexp.MustCompile(`^\w*[.\w]*[a-zA-Z0-9]$`)
+var validFileNameRegex = regexp.MustCompile(`^[a-zA-Z]([._-]?[a-zA-Z0-9]{1,})*$`)
 
 // interface guard
 var _ port.FileService = (*FileService)(nil)
@@ -28,18 +28,29 @@ func NewFileService(bucketRepo port.BucketRepository, fileRepo port.FileReposito
 }
 
 func (f *FileService) CreateFile(ctx context.Context, file *domain.File) (*domain.File, error) {
-	bucketName := file.BucketName
-	_, err := f.bucketRepo.GetBucketByName(ctx, bucketName)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get bucket: %w", err)
-	}
-
 	if !validFileNameRegex.MatchString(file.Name) {
 		return nil, fmt.Errorf("invalid file name: %s", file.Name)
 	}
 
 	if file.Size <= 0 {
 		return nil, fmt.Errorf("invalid file size: %d", file.Size)
+	}
+
+	bucketName := file.BucketName
+	bucket, err := f.bucketRepo.GetBucketByName(ctx, bucketName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get bucket: %w", err)
+	}
+
+	files, err := f.fileRepo.GetFilesByBucketID(ctx, bucket.ID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get files: %w", err)
+	}
+
+	for _, v := range files {
+		if v.Name == file.Name {
+			return nil, fmt.Errorf("file with name %s already exists in bucket %s", file.Name, bucketName)
+		}
 	}
 
 	return f.fileRepo.CreateFile(ctx, file)
