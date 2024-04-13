@@ -5,36 +5,24 @@ import (
 	"strings"
 )
 
-type DB struct {
-	Host             string
-	Port             int
-	User             string
-	Password         string
-	DriverName       string
-	DatabaseName     string
-	AdditionalConfig map[string]string
+type DBConfig struct {
+	Host             string            `help:"Database hostname" required:""`
+	Port             int               `help:"Database connection port" required:""`
+	User             string            `help:"Database user" required:""`
+	Password         string            `help:"Database password" required:""`
+	Driver           string            `help:"Database driver to be used" required:""`
+	Name             string            `help:"Database name" required:""`
+	AdditionalConfig map[string]string `help:"Additional database connection string query params" optional:""`
 }
 
-func NewDB(host string, port int, user, password, driverName, databaseName string, additionalConfig map[string]string) *DB {
-	return &DB{
-		Host:             host,
-		Port:             port,
-		User:             user,
-		Password:         password,
-		DriverName:       driverName,
-		DatabaseName:     databaseName,
-		AdditionalConfig: additionalConfig,
-	}
-}
-
-func (d *DB) ConnectionURL() string {
+func (d *DBConfig) ConnectionURL() string {
 	baseURL := fmt.Sprintf("%s://%s:%s@%s:%d/%s",
-		d.DriverName,
+		d.Driver,
 		d.User,
 		d.Password,
 		d.Host,
 		d.Port,
-		d.DatabaseName,
+		d.Name,
 	)
 
 	if len(d.AdditionalConfig) == 0 {

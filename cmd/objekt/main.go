@@ -20,10 +20,7 @@ func main() {
 	logConfig := &logger.Config{Level: cliConfig.LogLevel}
 	log := logConfig.Get()
 
-	dbConf := config.NewDB("localhost", 5432, "objekt_adm", "objekt123", "postgres", "objekt_db", map[string]string{
-		"sslmode": "disable",
-	})
-	db, err := postgres.NewDB(context.Background(), dbConf)
+	db, err := postgres.NewDB(context.Background(), cliConfig.DB.ConnectionURL())
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to connect to database")
 	}
