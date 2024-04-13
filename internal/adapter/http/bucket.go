@@ -11,12 +11,17 @@ import (
 )
 
 type BucketHandler struct {
-	log *zerolog.Logger
-	svc port.BucketService
+	log    *zerolog.Logger
+	router *httprouter.Router
+	svc    port.BucketService
 }
 
-func NewBucketHandler(log *zerolog.Logger, svc port.BucketService) *BucketHandler {
-	return &BucketHandler{log: log, svc: svc}
+func NewBucketHandler(log *zerolog.Logger, router *httprouter.Router, svc port.BucketService) *BucketHandler {
+	return &BucketHandler{
+		log:    log,
+		router: router,
+		svc:    svc,
+	}
 }
 
 type createBucketRequest struct {
@@ -25,13 +30,11 @@ type createBucketRequest struct {
 	Region domain.BucketRegion `json:"region"`
 }
 
-func (h *BucketHandler) GetRouter() *httprouter.Router {
-	router := httprouter.New()
-	router.GET("/buckets", h.ListBuckets)
-	router.POST("/buckets", h.CreateBucket)
-	router.GET("/buckets/:id", h.GetBucket)
-	router.DELETE("/buckets/:id", h.DeleteBucket)
-	return router
+func (h *BucketHandler) AddRoutes() {
+	h.router.GET("/buckets", h.ListBuckets)
+	h.router.POST("/buckets", h.CreateBucket)
+	h.router.GET("/buckets/:bucket_id", h.GetBucket)
+	h.router.DELETE("/buckets/:bucket_id", h.DeleteBucket)
 }
 
 func (h *BucketHandler) CreateBucket(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -65,7 +68,7 @@ func (h *BucketHandler) CreateBucket(w http.ResponseWriter, r *http.Request, p h
 }
 
 func (h *BucketHandler) GetBucket(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	bucketID := p.ByName("id")
+	bucketID := p.ByName("bucket_id")
 	bucket, err := h.svc.GetBucket(r.Context(), bucketID)
 	if err != nil {
 		h.log.Err(err).Str("bucket_id", bucketID).Msg("failed to retrieve bucket")
@@ -96,7 +99,7 @@ func (h *BucketHandler) ListBuckets(w http.ResponseWriter, r *http.Request, _ ht
 }
 
 func (h *BucketHandler) DeleteBucket(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	bucketID := p.ByName("id")
+	bucketID := p.ByName("bucket_id")
 	err := h.svc.DeleteBucket(r.Context(), bucketID)
 	if err != nil {
 		h.log.Err(err).Str("bucket_id", bucketID).Msg("failed to delete bucket")

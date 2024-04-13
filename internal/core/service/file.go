@@ -38,6 +38,10 @@ func (f *FileService) CreateFile(ctx context.Context, file *domain.File) (*domai
 		return nil, fmt.Errorf("invalid file name: %s", file.Name)
 	}
 
+	if file.Size <= 0 {
+		return nil, fmt.Errorf("invalid file size: %d", file.Size)
+	}
+
 	return f.fileRepo.CreateFile(ctx, file)
 }
 
@@ -64,11 +68,11 @@ func (f *FileService) GetFile(ctx context.Context, id string) (*domain.File, err
 	return f.fileRepo.GetFileByID(ctx, fileID)
 }
 
-func (f *FileService) GetFilesByBucketName(ctx context.Context, bucketName string) ([]domain.File, error) {
-	bucket, err := f.bucketRepo.GetBucketByName(ctx, bucketName)
+func (f *FileService) GetFilesByBucketID(ctx context.Context, bucketID string) ([]domain.File, error) {
+	bucketUUID, err := uuid.Parse(bucketID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get bucket: %w", err)
+		return nil, fmt.Errorf("invalid bucket ID: %w", err)
 	}
 
-	return f.fileRepo.GetFilesByBucketID(ctx, bucket.ID)
+	return f.fileRepo.GetFilesByBucketID(ctx, bucketUUID)
 }

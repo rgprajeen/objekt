@@ -16,9 +16,10 @@ type FileRepository struct {
 	br port.BucketRepository
 }
 
-func NewFileRepository() *FileRepository {
+func NewFileRepository(bucketRepo port.BucketRepository) *FileRepository {
 	return &FileRepository{
-		m: sync.Map{},
+		m:  sync.Map{},
+		br: bucketRepo,
 	}
 }
 
