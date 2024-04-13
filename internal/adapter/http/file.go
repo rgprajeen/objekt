@@ -5,17 +5,20 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/rs/zerolog"
 	"go.prajeen.com/objekt/internal/core/domain"
 	"go.prajeen.com/objekt/internal/core/port"
 )
 
 type FileHandler struct {
+	log    *zerolog.Logger
 	router *httprouter.Router
 	svc    port.FileService
 }
 
-func NewFileHandler(router *httprouter.Router, svc port.FileService) *FileHandler {
+func NewFileHandler(log *zerolog.Logger, router *httprouter.Router, svc port.FileService) *FileHandler {
 	return &FileHandler{
+		log:    log,
 		router: router,
 		svc:    svc,
 	}
@@ -39,6 +42,7 @@ func (h *FileHandler) CreateFile(w http.ResponseWriter, r *http.Request, p httpr
 	var requestBody createFileRequest
 	err := json.NewDecoder(r.Body).Decode(&requestBody)
 	if err != nil {
+		h.log.Err(err).Msg("failed to decode request body")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -52,6 +56,7 @@ func (h *FileHandler) CreateFile(w http.ResponseWriter, r *http.Request, p httpr
 
 	file, err = h.svc.CreateFile(r.Context(), file)
 	if err != nil {
+		h.log.Err(err).Msg("failed to create file")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -59,6 +64,7 @@ func (h *FileHandler) CreateFile(w http.ResponseWriter, r *http.Request, p httpr
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(file); err != nil {
+		h.log.Err(err).Msg("failed to encode response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -67,6 +73,7 @@ func (h *FileHandler) DeleteFile(w http.ResponseWriter, r *http.Request, p httpr
 	id := p.ByName("id")
 	err := h.svc.DeleteFile(r.Context(), id)
 	if err != nil {
+		h.log.Err(err).Msg("failed to delete file")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -78,6 +85,7 @@ func (h *FileHandler) GetFile(w http.ResponseWriter, r *http.Request, p httprout
 	id := p.ByName("id")
 	file, err := h.svc.GetFile(r.Context(), id)
 	if err != nil {
+		h.log.Err(err).Msg("failed to get file")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -92,12 +100,14 @@ func (h *FileHandler) GetFilesByBucketName(w http.ResponseWriter, r *http.Reques
 	bucketID := p.ByName("bucket_id")
 	files, err := h.svc.GetFilesByBucketID(r.Context(), bucketID)
 	if err != nil {
+		h.log.Err(err).Msg("failed to get files by bucket ID")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	if err = json.NewEncoder(w).Encode(files); err != nil {
+		h.log.Err(err).Msg("failed to encode response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

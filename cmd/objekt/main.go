@@ -31,11 +31,11 @@ func main() {
 	bucketRepo := repository.NewBucketRepository(db)
 	fileRepo := repository.NewFileRepository(db)
 	bucketSvc := service.NewBucketService(log, bucketRepo)
-	fileSvc := service.NewFileService(bucketRepo, fileRepo)
+	fileSvc := service.NewFileService(log, bucketRepo, fileRepo)
 
 	router := httprouter.New()
 	bucketHandler := obj_http.NewBucketHandler(log, router, bucketSvc)
-	fileHandler := obj_http.NewFileHandler(router, fileSvc)
+	fileHandler := obj_http.NewFileHandler(log, router, fileSvc)
 	bucketHandler.AddRoutes()
 	fileHandler.AddRoutes()
 
