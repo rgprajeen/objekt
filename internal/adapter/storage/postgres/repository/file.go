@@ -21,12 +21,7 @@ func NewFileRepository(db *postgres.DB) *FileRepository {
 var _ port.FileRepository = (*FileRepository)(nil)
 
 func (f *FileRepository) CreateFile(ctx context.Context, file *domain.File) (*domain.File, error) {
-	tx, err := f.db.Pool.Begin(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	row := tx.QueryRow(ctx,
+	row := f.db.Pool.QueryRow(ctx,
 		"INSERT INTO file (name, size, mime_type, bucket_id) VALUES ($1, $2, $3, (SELECT id from bucket where name = $4)) RETURNING public_id, created_at, updated_at",
 		file.Name, file.Size, file.MimeType, file.BucketName)
 	dbFile := &domain.File{
@@ -35,13 +30,7 @@ func (f *FileRepository) CreateFile(ctx context.Context, file *domain.File) (*do
 		MimeType:   file.MimeType,
 		BucketName: file.BucketName,
 	}
-	err = row.Scan(&dbFile.ID, &dbFile.CreatedAt, &dbFile.UpdatedAt)
-	if err != nil {
-		err = tx.Rollback(ctx)
-		return nil, err
-	}
-
-	err = tx.Commit(ctx)
+	err := row.Scan(&dbFile.ID, &dbFile.CreatedAt, &dbFile.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -49,18 +38,7 @@ func (f *FileRepository) CreateFile(ctx context.Context, file *domain.File) (*do
 }
 
 func (f *FileRepository) DeleteFile(ctx context.Context, id uuid.UUID) error {
-	tx, err := f.db.Pool.Begin(ctx)
-	if err != nil {
-		return err
-	}
-
-	_, err = tx.Exec(ctx, "DELETE FROM file WHERE public_id = $1", id)
-	if err != nil {
-		err = tx.Rollback(ctx)
-		return err
-	}
-
-	err = tx.Commit(ctx)
+	_, err := f.db.Pool.Exec(ctx, "DELETE FROM file WHERE public_id = $1", id)
 	if err != nil {
 		return err
 	}

@@ -21,24 +21,13 @@ func NewBucketRepository(db *postgres.DB) *BucketRepository {
 }
 
 func (b *BucketRepository) CreateBucket(ctx context.Context, bucket *domain.Bucket) (*domain.Bucket, error) {
-	tx, err := b.db.Pool.Begin(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	row := tx.QueryRow(ctx, "INSERT INTO bucket (name, type, region) VALUES ($1, $2, $3) RETURNING public_id, created_at, updated_at", bucket.Name, bucket.Type, bucket.Region)
+	row := b.db.Pool.QueryRow(ctx, "INSERT INTO bucket (name, type, region) VALUES ($1, $2, $3) RETURNING public_id, created_at, updated_at", bucket.Name, bucket.Type, bucket.Region)
 	dbBucket := &domain.Bucket{
 		Name:   bucket.Name,
 		Type:   bucket.Type,
 		Region: bucket.Region,
 	}
-	err = row.Scan(&dbBucket.ID, &dbBucket.CreatedAt, &dbBucket.UpdatedAt)
-	if err != nil {
-		err = tx.Rollback(ctx)
-		return nil, err
-	}
-
-	err = tx.Commit(ctx)
+	err := row.Scan(&dbBucket.ID, &dbBucket.CreatedAt, &dbBucket.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -46,16 +35,7 @@ func (b *BucketRepository) CreateBucket(ctx context.Context, bucket *domain.Buck
 }
 
 func (b *BucketRepository) DeleteBucket(ctx context.Context, id uuid.UUID) error {
-	tx, err := b.db.Pool.Begin(ctx)
-	if err != nil {
-		return err
-	}
-	_, err = tx.Exec(ctx, "DELETE FROM bucket WHERE public_id = $1", id)
-	if err != nil {
-		err = tx.Rollback(ctx)
-		return err
-	}
-	err = tx.Commit(ctx)
+	_, err := b.db.Pool.Exec(ctx, "DELETE FROM bucket WHERE public_id = $1", id)
 	if err != nil {
 		return err
 	}
