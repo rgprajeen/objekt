@@ -1,4 +1,4 @@
-package http
+package headers
 
 // HTTP Headers
 const (
