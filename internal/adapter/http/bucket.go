@@ -59,8 +59,9 @@ func (h *BucketHandler) CreateBucket(w http.ResponseWriter, r *http.Request, p h
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Location", "/buckets/"+bucket.ID.String())
+	w.WriteHeader(http.StatusCreated)
 	if err = json.NewEncoder(w).Encode(bucket); err != nil {
 		h.log.Err(err).Msg("failed to encode CreateBucket response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)

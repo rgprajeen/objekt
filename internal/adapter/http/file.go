@@ -61,8 +61,9 @@ func (h *FileHandler) CreateFile(w http.ResponseWriter, r *http.Request, p httpr
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Location", "/files/"+file.ID.String())
+	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(file); err != nil {
 		h.log.Err(err).Msg("failed to encode response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
