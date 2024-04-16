@@ -6,7 +6,6 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/zerolog"
-	"go.prajeen.com/objekt/internal/adapter/http/headers"
 	"go.prajeen.com/objekt/internal/core/domain"
 	"go.prajeen.com/objekt/internal/core/port"
 )
@@ -60,8 +59,8 @@ func (h *BucketHandler) CreateBucket(w http.ResponseWriter, r *http.Request, p h
 		return
 	}
 
-	w.Header().Set(headers.ContentType, "application/json")
-	w.Header().Set(headers.Location, "/buckets/"+bucket.ID.String())
+	w.Header().Set(HeaderContentType, ContentTypeJSON)
+	w.Header().Set(HeaderLocation, "/buckets/"+bucket.ID.String())
 	w.WriteHeader(http.StatusCreated)
 	if err = json.NewEncoder(w).Encode(bucket); err != nil {
 		h.log.Err(err).Msg("failed to encode CreateBucket response")
@@ -78,7 +77,7 @@ func (h *BucketHandler) GetBucket(w http.ResponseWriter, r *http.Request, p http
 		return
 	}
 
-	w.Header().Set(headers.ContentType, "application/json")
+	w.Header().Set(HeaderContentType, ContentTypeJSON)
 	if err = json.NewEncoder(w).Encode(bucket); err != nil {
 		h.log.Err(err).Msg("failed to encode GetBucket response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -93,7 +92,7 @@ func (h *BucketHandler) ListBuckets(w http.ResponseWriter, r *http.Request, _ ht
 		return
 	}
 
-	w.Header().Set(headers.ContentType, "application/json")
+	w.Header().Set(HeaderContentType, ContentTypeJSON)
 	if err = json.NewEncoder(w).Encode(buckets); err != nil {
 		h.log.Err(err).Msg("failed to encode ListBuckets response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
