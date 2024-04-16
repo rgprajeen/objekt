@@ -61,8 +61,8 @@ func (h *FileHandler) CreateFile(w http.ResponseWriter, r *http.Request, p httpr
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Location", "/files/"+file.ID.String())
+	w.Header().Set(ContentType, "application/json")
+	w.Header().Set(Location, "/files/"+file.ID.String())
 	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(file); err != nil {
 		h.log.Err(err).Msg("failed to encode response")
@@ -91,7 +91,7 @@ func (h *FileHandler) GetFile(w http.ResponseWriter, r *http.Request, p httprout
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set(ContentType, "application/json")
 	if err = json.NewEncoder(w).Encode(file); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -106,7 +106,7 @@ func (h *FileHandler) GetFilesByBucketName(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set(ContentType, "application/json")
 	if err = json.NewEncoder(w).Encode(files); err != nil {
 		h.log.Err(err).Msg("failed to encode response")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
