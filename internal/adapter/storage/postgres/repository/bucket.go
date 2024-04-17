@@ -63,7 +63,7 @@ func (b *BucketRepository) GetBucketByName(ctx context.Context, name string) (*d
 }
 
 func (b *BucketRepository) ListBuckets(ctx context.Context) ([]domain.Bucket, error) {
-	var buckets []domain.Bucket
+	buckets := make([]domain.Bucket, 0)
 	rows, err := b.db.Pool.Query(ctx, "SELECT public_id, name, type, region, created_at, updated_at FROM bucket")
 	if err != nil {
 		return nil, err

@@ -80,11 +80,11 @@ func validateBucket(b *domain.Bucket) error {
 		return errors.New("invalid bucket name")
 	}
 
-	if b.Region == domain.InvalidRegion {
+	if b.Region == domain.BucketRegionInvalid {
 		return errors.New("invalid bucket region")
 	}
 
-	if b.Type == domain.InvalidType {
+	if b.Type == domain.BucketTypeInvalid {
 		return errors.New("invalid bucket type")
 	}
 
