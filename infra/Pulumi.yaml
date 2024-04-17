@@ -1,0 +1,7 @@
+name: objekt
+runtime: nodejs
+description: A facade for modern cloud storage
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: ""
