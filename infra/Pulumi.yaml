@@ -1,5 +1,5 @@
 name: objekt
-runtime: nodejs
+runtime: go
 description: A facade for modern cloud storage
 config:
   pulumi:tags:

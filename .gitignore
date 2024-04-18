@@ -19,9 +19,7 @@
 # !Makefile
 
 # Pulumi
-!infra/*.json
 !infra/*.yaml
-!infra/*.ts
 
 # ...even if they are in subdirectories
 !*/
