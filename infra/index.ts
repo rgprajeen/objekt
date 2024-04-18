@@ -38,7 +38,7 @@ const s3Policy = new aws.iam.Policy("objekt-aws-s3-policy", {
                 "s3:*"
             ],
             Resource: [
-                "arn:aws:s3:::objekt_*"
+                "arn:aws:s3:::objekt-*"
             ],
         }],
     }),

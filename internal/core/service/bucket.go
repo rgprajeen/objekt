@@ -18,7 +18,7 @@ type BucketService struct {
 	fileRepo   port.FileRepository
 }
 
-var validBucketNameRegex = regexp.MustCompile(`^[a-zA-Z]([_-]?[a-zA-Z0-9]{1,})*$`)
+var validBucketNameRegex = regexp.MustCompile(`^[a-zA-Z](-?[a-zA-Z0-9]{1,})*$`)
 
 // interface guard
 var _ port.BucketService = (*BucketService)(nil)
@@ -83,6 +83,10 @@ func (s *BucketService) DeleteBucket(ctx context.Context, id string) error {
 }
 
 func validateBucket(b *domain.Bucket) error {
+	if len(b.Name) > 52 {
+		return errors.New("bucket name too long")
+	}
+
 	if !validBucketNameRegex.MatchString(b.Name) {
 		return errors.New("invalid bucket name")
 	}
