@@ -13,8 +13,9 @@ import (
 )
 
 type BucketService struct {
-	log  *zerolog.Logger
-	repo port.BucketRepository
+	log        *zerolog.Logger
+	bucketRepo port.BucketRepository
+	fileRepo   port.FileRepository
 }
 
 var validBucketNameRegex = regexp.MustCompile(`^[a-zA-Z]([_-]?[a-zA-Z0-9]{1,})*$`)
@@ -22,8 +23,8 @@ var validBucketNameRegex = regexp.MustCompile(`^[a-zA-Z]([_-]?[a-zA-Z0-9]{1,})*$
 // interface guard
 var _ port.BucketService = (*BucketService)(nil)
 
-func NewBucketService(log *zerolog.Logger, repo port.BucketRepository) *BucketService {
-	return &BucketService{log: log, repo: repo}
+func NewBucketService(log *zerolog.Logger, bucketRepo port.BucketRepository, fileRepo port.FileRepository) *BucketService {
+	return &BucketService{log: log, bucketRepo: bucketRepo, fileRepo: fileRepo}
 }
 
 func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket) (*domain.Bucket, error) {
@@ -32,7 +33,7 @@ func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket)
 		return nil, fmt.Errorf("invalid bucket request: %w", err)
 	}
 
-	b, _ := s.repo.GetBucketByName(ctx, bucket.Name)
+	b, _ := s.bucketRepo.GetBucketByName(ctx, bucket.Name)
 	if b != nil {
 		if b.IsIdentical(bucket) {
 			s.log.Debug().Str("bucket_name", bucket.Name).Msg("duplicate bucket creation attempted")
@@ -42,7 +43,7 @@ func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket)
 		return nil, errors.New("bucket already exists")
 	}
 
-	return s.repo.CreateBucket(ctx, bucket)
+	return s.bucketRepo.CreateBucket(ctx, bucket)
 }
 
 func (s *BucketService) GetBucket(ctx context.Context, id string) (*domain.Bucket, error) {
@@ -52,11 +53,11 @@ func (s *BucketService) GetBucket(ctx context.Context, id string) (*domain.Bucke
 		return nil, errors.New("invalid bucket ID")
 	}
 
-	return s.repo.GetBucketByID(ctx, bucketID)
+	return s.bucketRepo.GetBucketByID(ctx, bucketID)
 }
 
 func (s *BucketService) ListBuckets(ctx context.Context) ([]domain.Bucket, error) {
-	return s.repo.ListBuckets(ctx)
+	return s.bucketRepo.ListBuckets(ctx)
 }
 
 func (s *BucketService) DeleteBucket(ctx context.Context, id string) error {
@@ -66,13 +67,19 @@ func (s *BucketService) DeleteBucket(ctx context.Context, id string) error {
 		return errors.New("invalid bucket ID")
 	}
 
-	_, err = s.repo.GetBucketByID(ctx, bucketID)
+	_, err = s.bucketRepo.GetBucketByID(ctx, bucketID)
 	if err != nil {
 		s.log.Err(err).Str("bucket_id", id).Msg("bucket not found")
 		return fmt.Errorf("failed to delete bucket: %w", err)
 	}
 
-	return s.repo.DeleteBucket(ctx, bucketID)
+	err = s.fileRepo.DeleteFilesByBucketID(ctx, bucketID)
+	if err != nil {
+		s.log.Err(err).Str("bucket_id", id).Msg("failed to delete files")
+		return fmt.Errorf("failed to delete files in bucket: %w", err)
+	}
+
+	return s.bucketRepo.DeleteBucket(ctx, bucketID)
 }
 
 func validateBucket(b *domain.Bucket) error {

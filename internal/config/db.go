@@ -6,12 +6,12 @@ import (
 )
 
 type DBConfig struct {
-	Host             string            `help:"Database hostname" required:""`
-	Port             int               `help:"Database connection port" required:""`
-	User             string            `help:"Database user" required:""`
-	Password         string            `help:"Database password" required:""`
-	Driver           string            `help:"Database driver to be used" enum:"postgres" default:"postgres" required:""`
-	Name             string            `help:"Database name" required:""`
+	Host             string            `help:"Database hostname" default:"localhost"`
+	Port             int               `help:"Database connection port" default:"5432"`
+	User             string            `help:"Database user" default:"postgres"`
+	Password         string            `help:"Database password" default:"password"`
+	Driver           string            `help:"Database driver to be used" enum:"postgres" default:"postgres"`
+	Name             string            `help:"Database name" default:"objekt"`
 	AdditionalConfig map[string]string `help:"Additional database connection string query params"`
 }
 

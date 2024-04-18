@@ -12,6 +12,7 @@ type FileRepository interface {
 	GetFileByID(ctx context.Context, id uuid.UUID) (*domain.File, error)
 	GetFileByName(ctx context.Context, name string, bucketID uuid.UUID) (*domain.File, error)
 	GetFilesByBucketID(ctx context.Context, bucketID uuid.UUID) ([]domain.File, error)
+	DeleteFilesByBucketID(ctx context.Context, bucketID uuid.UUID) error
 	DeleteFile(ctx context.Context, id uuid.UUID) error
 }
 

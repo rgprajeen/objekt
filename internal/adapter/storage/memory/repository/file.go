@@ -49,6 +49,22 @@ func (f *FileRepository) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
+func (f *FileRepository) DeleteFilesByBucketID(ctx context.Context, bucketID uuid.UUID) error {
+	b, err := f.br.GetBucketByID(ctx, bucketID)
+	if err != nil {
+		return fmt.Errorf("failed to get bucket: %w", err)
+	}
+	f.m.Range(func(key, value any) bool {
+		file := value.(*domain.File)
+		if file.BucketName == b.Name {
+			f.m.Delete(key)
+			return false
+		}
+		return true
+	})
+	return nil
+}
+
 func (f *FileRepository) GetFileByID(ctx context.Context, id uuid.UUID) (*domain.File, error) {
 	file, ok := f.m.Load(id)
 	if !ok {

@@ -27,7 +27,7 @@ func main() {
 
 	bucketRepo := repository.NewBucketRepository(db)
 	fileRepo := repository.NewFileRepository(db)
-	bucketSvc := service.NewBucketService(log, bucketRepo)
+	bucketSvc := service.NewBucketService(log, bucketRepo, fileRepo)
 	fileSvc := service.NewFileService(log, bucketRepo, fileRepo)
 
 	router := httprouter.New()

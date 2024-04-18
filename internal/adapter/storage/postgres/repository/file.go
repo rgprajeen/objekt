@@ -45,6 +45,14 @@ func (f *FileRepository) DeleteFile(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
+func (f *FileRepository) DeleteFilesByBucketID(ctx context.Context, bucketID uuid.UUID) error {
+	_, err := f.db.Pool.Exec(ctx, "DELETE FROM file WHERE bucket_id = (SELECT id FROM bucket WHERE public_id = $1)", bucketID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (f *FileRepository) GetFileByID(ctx context.Context, id uuid.UUID) (*domain.File, error) {
 	row := f.db.Pool.QueryRow(ctx,
 		"SELECT f.public_id, f.name, f.size, f.mime_type, b.name, f.created_at, f.updated_at FROM file f, bucket b WHERE f.public_id = $1 AND b.id = f.bucket_id", id)
