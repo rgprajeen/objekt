@@ -1,3 +1,4 @@
+-- migrate:up
 create table file (
   id bigserial primary key,
   public_id uuid not null default (uuid_generate_v4()),
@@ -14,3 +15,10 @@ create table file (
 create unique index file_public_id_uindex on file (public_id);
 create index idx_file_mimetype on file (mime_type);
 create index idx_file_size on file (size);
+
+-- migrate:down
+drop index if exists file_public_id_uindex;
+drop index if exists idx_file_mimetype;
+drop index if exists idx_file_size;
+
+drop table if exists file;
