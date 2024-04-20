@@ -13,14 +13,11 @@
 !README.md
 !LICENSE
 !.air.toml
-!.envrc
-!.tool-versions
 
 # !Makefile
 
 # Pulumi
-!infra/*.yaml
+!/infra/*.yaml
 
 # ...even if they are in subdirectories
 !*/
-node_modules/
