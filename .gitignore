@@ -13,6 +13,8 @@
 !README.md
 !LICENSE
 !.air.toml
+# !.env
+!docker-compose.yml
 
 # !Makefile
 
