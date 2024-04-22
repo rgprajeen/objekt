@@ -4,6 +4,12 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/stephenafamo/bob"
+	"github.com/stephenafamo/bob/dialect/psql"
+	"github.com/stephenafamo/bob/dialect/psql/dm"
+	"github.com/stephenafamo/bob/dialect/psql/im"
+	"github.com/stephenafamo/bob/dialect/psql/sm"
+	"github.com/stephenafamo/scan"
 	"go.prajeen.com/objekt/internal/adapter/storage/postgres"
 	"go.prajeen.com/objekt/internal/core/domain"
 	"go.prajeen.com/objekt/internal/core/port"
@@ -21,21 +27,24 @@ func NewBucketRepository(db *postgres.DB) *BucketRepository {
 }
 
 func (b *BucketRepository) CreateBucket(ctx context.Context, bucket *domain.Bucket) (*domain.Bucket, error) {
-	row := b.db.Pool.QueryRow(ctx, "INSERT INTO bucket (name, type, region) VALUES ($1, $2, $3) RETURNING public_id, created_at, updated_at", bucket.Name, bucket.Type, bucket.Region)
-	dbBucket := &domain.Bucket{
-		Name:   bucket.Name,
-		Type:   bucket.Type,
-		Region: bucket.Region,
-	}
-	err := row.Scan(&dbBucket.ID, &dbBucket.CreatedAt, &dbBucket.UpdatedAt)
+	q := psql.Insert(
+		im.Into("bucket", "name", "type", "region"),
+		im.Values(psql.Arg(bucket.Name, bucket.Type, bucket.Region)),
+		im.Returning("public_id", "name", "type", "region", "created_at", "updated_at"),
+	)
+	dbBucket, err := bob.One[domain.Bucket](ctx, b.db.DB, q, scan.StructMapper[domain.Bucket]())
 	if err != nil {
 		return nil, err
 	}
-	return dbBucket, nil
+	return &dbBucket, nil
 }
 
 func (b *BucketRepository) DeleteBucket(ctx context.Context, id uuid.UUID) error {
-	_, err := b.db.Pool.Exec(ctx, "DELETE FROM bucket WHERE public_id = $1", id)
+	q := psql.Delete(
+		dm.From("bucket"),
+		dm.Where(psql.Quote("public_id").EQ(psql.Arg(id))),
+	)
+	_, err := bob.Exec(ctx, b.db.DB, q)
 	if err != nil {
 		return err
 	}
@@ -43,9 +52,12 @@ func (b *BucketRepository) DeleteBucket(ctx context.Context, id uuid.UUID) error
 }
 
 func (b *BucketRepository) GetBucketByID(ctx context.Context, id uuid.UUID) (*domain.Bucket, error) {
-	row := b.db.Pool.QueryRow(ctx, "SELECT public_id, name, type, region, created_at, updated_at FROM bucket WHERE public_id = $1", id)
-	var bucket domain.Bucket
-	err := row.Scan(&bucket.ID, &bucket.Name, &bucket.Type, &bucket.Region, &bucket.CreatedAt, &bucket.UpdatedAt)
+	q := psql.Select(
+		sm.Columns("public_id", "name", "type", "region", "created_at", "updated_at"),
+		sm.From("bucket"),
+		sm.Where(psql.Quote("public_id").EQ(psql.Arg(id))),
+	)
+	bucket, err := bob.One[domain.Bucket](ctx, b.db.DB, q, scan.StructMapper[domain.Bucket]())
 	if err != nil {
 		return nil, err
 	}
@@ -53,9 +65,12 @@ func (b *BucketRepository) GetBucketByID(ctx context.Context, id uuid.UUID) (*do
 }
 
 func (b *BucketRepository) GetBucketByName(ctx context.Context, name string) (*domain.Bucket, error) {
-	row := b.db.Pool.QueryRow(ctx, "SELECT public_id, name, type, region, created_at, updated_at FROM bucket WHERE name = $1", name)
-	var bucket domain.Bucket
-	err := row.Scan(&bucket.ID, &bucket.Name, &bucket.Type, &bucket.Region, &bucket.CreatedAt, &bucket.UpdatedAt)
+	q := psql.Select(
+		sm.Columns("public_id", "name", "type", "region", "created_at", "updated_at"),
+		sm.From("bucket"),
+		sm.Where(psql.Quote("name").EQ(psql.Arg(name))),
+	)
+	bucket, err := bob.One[domain.Bucket](ctx, b.db.DB, q, scan.StructMapper[domain.Bucket]())
 	if err != nil {
 		return nil, err
 	}
@@ -63,19 +78,16 @@ func (b *BucketRepository) GetBucketByName(ctx context.Context, name string) (*d
 }
 
 func (b *BucketRepository) ListBuckets(ctx context.Context) ([]domain.Bucket, error) {
-	buckets := make([]domain.Bucket, 0)
-	rows, err := b.db.Pool.Query(ctx, "SELECT public_id, name, type, region, created_at, updated_at FROM bucket")
+	q := psql.Select(
+		sm.Columns("public_id", "name", "type", "region", "created_at", "updated_at"),
+		sm.From("bucket"),
+	)
+	buckets, err := bob.All[domain.Bucket](ctx, b.db.DB, q, scan.StructMapper[domain.Bucket]())
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-	for rows.Next() {
-		var bucket domain.Bucket
-		err := rows.Scan(&bucket.ID, &bucket.Name, &bucket.Type, &bucket.Region, &bucket.CreatedAt, &bucket.UpdatedAt)
-		if err != nil {
-			return nil, err
-		}
-		buckets = append(buckets, bucket)
+	if buckets == nil {
+		return make([]domain.Bucket, 0), err
 	}
 	return buckets, nil
 }
