@@ -9,8 +9,7 @@ import (
 )
 
 type DB struct {
-	Pool *pgxpool.Pool
-	DB   bob.DB
+	DB bob.DB
 }
 
 func NewDB(ctx context.Context, connectionURL string) (*DB, error) {
@@ -20,5 +19,5 @@ func NewDB(ctx context.Context, connectionURL string) (*DB, error) {
 	}
 	stdPool := stdlib.OpenDBFromPool(pool)
 
-	return &DB{Pool: pool, DB: bob.NewDB(stdPool)}, nil
+	return &DB{DB: bob.NewDB(stdPool)}, nil
 }

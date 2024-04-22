@@ -4,6 +4,12 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/stephenafamo/bob"
+	"github.com/stephenafamo/bob/dialect/psql"
+	"github.com/stephenafamo/bob/dialect/psql/dm"
+	"github.com/stephenafamo/bob/dialect/psql/im"
+	"github.com/stephenafamo/bob/dialect/psql/sm"
+	"github.com/stephenafamo/scan"
 	"go.prajeen.com/objekt/internal/adapter/storage/postgres"
 	"go.prajeen.com/objekt/internal/core/domain"
 	"go.prajeen.com/objekt/internal/core/port"
@@ -21,24 +27,29 @@ func NewFileRepository(db *postgres.DB) *FileRepository {
 var _ port.FileRepository = (*FileRepository)(nil)
 
 func (f *FileRepository) CreateFile(ctx context.Context, file *domain.File) (*domain.File, error) {
-	row := f.db.Pool.QueryRow(ctx,
-		"INSERT INTO file (name, size, mime_type, bucket_id) VALUES ($1, $2, $3, (SELECT id from bucket where name = $4)) RETURNING public_id, created_at, updated_at",
-		file.Name, file.Size, file.MimeType, file.BucketName)
-	dbFile := &domain.File{
-		Name:       file.Name,
-		Size:       file.Size,
-		MimeType:   file.MimeType,
-		BucketName: file.BucketName,
-	}
-	err := row.Scan(&dbFile.ID, &dbFile.CreatedAt, &dbFile.UpdatedAt)
+	bucketQuery := psql.Select(
+		sm.Columns("id"),
+		sm.From("bucket"),
+		sm.Where(psql.Quote("name").EQ(psql.Arg(file.BucketName))),
+	)
+	q := psql.Insert(
+		im.Into("file", "name", "size", "mime_type", "bucket_id"),
+		im.Values(psql.Arg(file.Name), psql.Arg(file.Size), psql.Arg(file.MimeType), psql.Group(bucketQuery.Expression)),
+		im.Returning("name", "public_id", "size", "mime_type", "bucket_id", "created_at", "updated_at"),
+	)
+	dbFile, err := bob.One[domain.File](ctx, f.db.DB, q, scan.StructMapper[domain.File]())
 	if err != nil {
 		return nil, err
 	}
-	return dbFile, nil
+	return &dbFile, nil
 }
 
 func (f *FileRepository) DeleteFile(ctx context.Context, id uuid.UUID) error {
-	_, err := f.db.Pool.Exec(ctx, "DELETE FROM file WHERE public_id = $1", id)
+	q := psql.Delete(
+		dm.From("file"),
+		dm.Where(psql.Quote("public_id").EQ(psql.Arg(id))),
+	)
+	_, err := bob.Exec(ctx, f.db.DB, q)
 	if err != nil {
 		return err
 	}
@@ -46,7 +57,16 @@ func (f *FileRepository) DeleteFile(ctx context.Context, id uuid.UUID) error {
 }
 
 func (f *FileRepository) DeleteFilesByBucketID(ctx context.Context, bucketID uuid.UUID) error {
-	_, err := f.db.Pool.Exec(ctx, "DELETE FROM file WHERE bucket_id = (SELECT id FROM bucket WHERE public_id = $1)", bucketID)
+	bucketIDQuery := psql.Select(
+		sm.Columns("id"),
+		sm.From("bucket"),
+		sm.Where(psql.Quote("public_id").EQ(psql.Arg(bucketID))),
+	)
+	q := psql.Delete(
+		dm.From("file"),
+		dm.Where(psql.Quote("bucket_id").EQ(psql.Group(bucketIDQuery.Expression))),
+	)
+	_, err := bob.Exec(ctx, f.db.DB, q)
 	if err != nil {
 		return err
 	}
@@ -54,44 +74,69 @@ func (f *FileRepository) DeleteFilesByBucketID(ctx context.Context, bucketID uui
 }
 
 func (f *FileRepository) GetFileByID(ctx context.Context, id uuid.UUID) (*domain.File, error) {
-	row := f.db.Pool.QueryRow(ctx,
-		"SELECT f.public_id, f.name, f.size, f.mime_type, b.name, f.created_at, f.updated_at FROM file f, bucket b WHERE f.public_id = $1 AND b.id = f.bucket_id", id)
-	var file domain.File
-	err := row.Scan(&file.ID, &file.Name, &file.Size, &file.MimeType, &file.BucketName, &file.CreatedAt, &file.UpdatedAt)
+	q := psql.Select(
+		sm.Columns(
+			psql.Quote("f", "name").As("name"),
+			psql.Quote("f", "public_id").As("public_id"),
+			psql.Quote("f", "size").As("size"),
+			psql.Quote("f", "mime_type").As("mime_type"),
+			psql.Quote("b", "name").As("bucket_name"),
+			psql.Quote("f", "created_at").As("created_at"),
+			psql.Quote("f", "updated_at").As("updated_at")),
+		sm.From("file").As("f"),
+		sm.InnerJoin("bucket").As("b").OnEQ(psql.Quote("f", "bucket_id"), psql.Quote("b", "id")),
+		sm.Where(psql.Quote("f", "public_id").EQ(psql.Arg(id))),
+	)
+	dbFile, err := bob.One[domain.File](ctx, f.db.DB, q, scan.StructMapper[domain.File]())
 	if err != nil {
 		return nil, err
 	}
-	return &file, nil
+	return &dbFile, nil
 }
 
 func (f *FileRepository) GetFileByName(ctx context.Context, name string, bucketID uuid.UUID) (*domain.File, error) {
-	row := f.db.Pool.QueryRow(ctx,
-		"SELECT f.public_id, f.name, f.size, f.mime_type, b.name, f.created_at, f.updated_at FROM file f, bucket b WHERE f.name = $1 AND f.bucket_id = b.id AND b.public_id = $2",
-		name, bucketID)
-	var file domain.File
-	err := row.Scan(&file.ID, &file.Name, &file.Size, &file.MimeType, &file.BucketName, &file.CreatedAt, &file.UpdatedAt)
+	q := psql.Select(
+		sm.Columns(
+			psql.Quote("f", "name").As("name"),
+			psql.Quote("f", "public_id").As("public_id"),
+			psql.Quote("f", "size").As("size"),
+			psql.Quote("f", "mime_type").As("mime_type"),
+			psql.Quote("b", "name").As("bucket_name"),
+			psql.Quote("f", "created_at").As("created_at"),
+			psql.Quote("f", "updated_at").As("updated_at")),
+		sm.From("file").As("f"),
+		sm.InnerJoin("bucket").As("b").OnEQ(psql.Quote("f", "bucket_id"), psql.Quote("b", "id")),
+		sm.Where(
+			psql.Quote("f", "name").EQ(psql.Arg(name)).And(psql.Quote("b", "public_id").EQ(psql.Arg(bucketID))),
+		),
+	)
+	dbFile, err := bob.One[domain.File](ctx, f.db.DB, q, scan.StructMapper[domain.File]())
 	if err != nil {
 		return nil, err
 	}
-	return &file, nil
+	return &dbFile, nil
 }
 
 func (f *FileRepository) GetFilesByBucketID(ctx context.Context, bucketID uuid.UUID) ([]domain.File, error) {
-	rows, err := f.db.Pool.Query(ctx,
-		"SELECT f.public_id, f.name, f.size, f.mime_type, b.name, f.created_at, f.updated_at FROM file f, bucket b WHERE b.id = f.bucket_id AND b.public_id = $1", bucketID)
+	q := psql.Select(
+		sm.Columns(
+			psql.Quote("f", "name").As("name"),
+			psql.Quote("f", "public_id").As("public_id"),
+			psql.Quote("f", "size").As("size"),
+			psql.Quote("f", "mime_type").As("mime_type"),
+			psql.Quote("b", "name").As("bucket_name"),
+			psql.Quote("f", "created_at").As("created_at"),
+			psql.Quote("f", "updated_at").As("updated_at")),
+		sm.From("file").As("f"),
+		sm.InnerJoin("bucket").As("b").OnEQ(psql.Quote("f", "bucket_id"), psql.Quote("b", "id")),
+		sm.Where(psql.Quote("b", "public_id").EQ(psql.Arg(bucketID))),
+	)
+	files, err := bob.All[domain.File](ctx, f.db.DB, q, scan.StructMapper[domain.File]())
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-
-	var files []domain.File
-	for rows.Next() {
-		var file domain.File
-		err = rows.Scan(&file.ID, &file.Name, &file.Size, &file.MimeType, &file.BucketName, &file.CreatedAt, &file.UpdatedAt)
-		if err != nil {
-			return nil, err
-		}
-		files = append(files, file)
+	if files == nil {
+		return make([]domain.File, 0), nil
 	}
 	return files, nil
 }
