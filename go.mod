@@ -8,6 +8,7 @@ require (
 	github.com/rs/zerolog v1.32.0
 	github.com/stephenafamo/bob v0.25.0
 	github.com/stephenafamo/scan v0.4.2
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (

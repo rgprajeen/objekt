@@ -15,10 +15,10 @@ import (
 )
 
 func main() {
-	cliConfig := config.Parse()
+	config.Load()
+	cliConfig := config.Global()
 
-	logConfig := &logger.Config{Level: cliConfig.LogLevel}
-	log := logConfig.Get()
+	log := logger.Get()
 
 	db, err := postgres.NewDB(context.Background(), cliConfig.DB.ConnectionURL())
 	if err != nil {
