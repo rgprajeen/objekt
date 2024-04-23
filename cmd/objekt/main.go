@@ -15,8 +15,7 @@ import (
 )
 
 func main() {
-	config.Load()
-	cliConfig := config.Global()
+	cliConfig := config.Get()
 
 	log := logger.Get()
 

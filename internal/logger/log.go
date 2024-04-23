@@ -20,7 +20,7 @@ var log zerolog.Logger
 
 func Get() *zerolog.Logger {
 	once.Do(func() {
-		logConfig := config.Log()
+		logConfig := config.Get().Log
 		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 		zerolog.TimeFieldFormat = time.RFC3339Nano
 		zerolog.CallerMarshalFunc = func(pc uintptr, file string, line int) string {
