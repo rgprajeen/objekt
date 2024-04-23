@@ -6,13 +6,15 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/stephenafamo/bob"
+	"go.prajeen.com/objekt/internal/config"
 )
 
 type DB struct {
 	DB bob.DB
 }
 
-func NewDB(ctx context.Context, connectionURL string) (*DB, error) {
+func NewDB(ctx context.Context) (*DB, error) {
+	connectionURL := config.Get().DB.ConnectionURL()
 	pool, err := pgxpool.New(ctx, connectionURL)
 	if err != nil {
 		return nil, err

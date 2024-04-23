@@ -7,11 +7,17 @@ import (
 )
 
 type globalConfig struct {
-	Hostname string    `help:"Hostname of the Objekt server" default:"localhost" short:"H"`
-	Port     int       `help:"Port of the Objekt server" default:"8080" short:"p"`
-	Log      LogConfig `embed:"" prefix:"log."`
-	DB       DBConfig  `embed:"" prefix:"db."`
+	Hostname       string    `help:"Hostname of the Objekt server" default:"localhost" short:"H"`
+	Port           int       `help:"Port of the Objekt server" default:"8080" short:"p"`
+	StorageBackend string    `help:"Select the storage backend for data" enum:"memory,database" default:"memory"`
+	Log            LogConfig `embed:"" prefix:"log."`
+	DB             DBConfig  `embed:"" prefix:"db."`
 }
+
+const (
+	StorageBackendMemory   = "memory"
+	StorageBackendDatabase = "database"
+)
 
 var config globalConfig
 var once sync.Once
