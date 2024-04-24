@@ -2,7 +2,7 @@ package domain
 
 type BucketType int
 
-//go:generate go-enum -type=BucketType -linecomment
+//go:generate go run github.com/searKing/golang/tools/go-enum@latest -type=BucketType -linecomment
 const (
 	BucketTypeInvalid BucketType = iota // invalid
 	BucketTypeAWS                       //aws
@@ -12,7 +12,7 @@ const (
 
 type BucketRegion int
 
-//go:generate go-enum -type=BucketRegion -linecomment
+//go:generate go run github.com/searKing/golang/tools/go-enum@latest -type=BucketRegion -linecomment
 const (
 	BucketRegionInvalid      BucketRegion = iota // invalid
 	BucketRegionAPSouthEast1                     // ap-southeast-1
