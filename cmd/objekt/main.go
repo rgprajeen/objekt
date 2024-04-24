@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	_ "net/http/pprof"
 
 	"github.com/julienschmidt/httprouter"
 	obj_http "go.prajeen.com/objekt/internal/adapter/http"
@@ -40,6 +41,10 @@ func main() {
 	fileSvc := service.NewFileService(log, bucketRepo, fileRepo)
 
 	router := httprouter.New()
+	if cliConfig.Http.PprofEnabled {
+		router.Handler(http.MethodGet, "/debug/pprof/*item", http.DefaultServeMux)
+		log.Debug().Str("endpoint_format", "/debug/pprof/*item").Msg("Added routes to pprof endpoints")
+	}
 	bucketHandler := obj_http.NewBucketHandler(log, router, bucketSvc)
 	fileHandler := obj_http.NewFileHandler(log, router, fileSvc)
 	bucketHandler.AddRoutes()
