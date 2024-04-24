@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -46,7 +45,7 @@ func main() {
 	bucketHandler.AddRoutes()
 	fileHandler.AddRoutes()
 
-	listener := fmt.Sprintf("%s:%d", cliConfig.Hostname, cliConfig.Port)
+	listener := cliConfig.Http.ListenerURL()
 	log.Info().Str("listener", listener).Msgf("Starting Objekt Server at http://%s", listener)
 	log.Fatal().Err(http.ListenAndServe(listener, router)).Msg("Objekt server closed")
 }
