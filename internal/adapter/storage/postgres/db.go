@@ -6,7 +6,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/stephenafamo/bob"
-	"go.prajeen.com/objekt/internal/config"
+	"github.com/upmahq/objekt/internal/config"
 )
 
 type DB struct {

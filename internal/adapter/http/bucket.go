@@ -1,4 +1,4 @@
-package http // import "go.prajeen.com/objekt/internal/adapter/http"
+package http // import "github.com/upmahq/objekt/internal/adapter/http"
 
 import (
 	"encoding/json"
@@ -6,8 +6,8 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/zerolog"
-	"go.prajeen.com/objekt/internal/core/domain"
-	"go.prajeen.com/objekt/internal/core/port"
+	"github.com/upmahq/objekt/internal/core/domain"
+	"github.com/upmahq/objekt/internal/core/port"
 )
 
 type BucketHandler struct {

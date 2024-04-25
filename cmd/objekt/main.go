@@ -6,14 +6,14 @@ import (
 	_ "net/http/pprof"
 
 	"github.com/julienschmidt/httprouter"
-	obj_http "go.prajeen.com/objekt/internal/adapter/http"
-	m_repo "go.prajeen.com/objekt/internal/adapter/storage/memory/repository"
-	"go.prajeen.com/objekt/internal/adapter/storage/postgres"
-	p_repo "go.prajeen.com/objekt/internal/adapter/storage/postgres/repository"
-	"go.prajeen.com/objekt/internal/config"
-	"go.prajeen.com/objekt/internal/core/port"
-	"go.prajeen.com/objekt/internal/core/service"
-	"go.prajeen.com/objekt/internal/logger"
+	obj_http "github.com/upmahq/objekt/internal/adapter/http"
+	m_repo "github.com/upmahq/objekt/internal/adapter/storage/memory/repository"
+	"github.com/upmahq/objekt/internal/adapter/storage/postgres"
+	p_repo "github.com/upmahq/objekt/internal/adapter/storage/postgres/repository"
+	"github.com/upmahq/objekt/internal/config"
+	"github.com/upmahq/objekt/internal/core/port"
+	"github.com/upmahq/objekt/internal/core/service"
+	"github.com/upmahq/objekt/internal/logger"
 )
 
 func main() {

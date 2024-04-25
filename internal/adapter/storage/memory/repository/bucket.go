@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"go.prajeen.com/objekt/internal/core/domain"
-	"go.prajeen.com/objekt/internal/core/port"
+	"github.com/upmahq/objekt/internal/core/domain"
+	"github.com/upmahq/objekt/internal/core/port"
 )
 
 type BucketRepository struct {

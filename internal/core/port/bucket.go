@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"go.prajeen.com/objekt/internal/core/domain"
+	"github.com/upmahq/objekt/internal/core/domain"
 )
 
 // BucketRepository is an interface to interact with the storage layer

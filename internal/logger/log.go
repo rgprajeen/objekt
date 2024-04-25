@@ -11,7 +11,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/pkgerrors"
-	"go.prajeen.com/objekt/internal/config"
+	"github.com/upmahq/objekt/internal/config"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 

@@ -1,4 +1,4 @@
-module go.prajeen.com/objekt
+module github.com/upmahq/objekt
 
 go 1.22.2
 

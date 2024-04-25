@@ -1,4 +1,4 @@
-package http // import "go.prajeen.com/objekt/internal/adapter/http"
+package http // import "github.com/upmahq/objekt/internal/adapter/http"
 
 // HTTP Headers
 const (
