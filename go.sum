@@ -77,8 +77,8 @@ github.com/stephenafamo/bob v0.25.0 h1:dhIP2y9+EnFNzuUYfsmjZvINpwIlgu3rQi1wMrNhS
 github.com/stephenafamo/bob v0.25.0/go.mod h1:xpmt0uOybohfD2YNgcj9MtlFYIUWl+IDIIl6CH/8EtM=
 github.com/stephenafamo/fakedb v0.0.0-20221230081958-0b86f816ed97 h1:XItoZNmhOih06TC02jK7l3wlpZ0XT/sPQYutDcGOQjg=
 github.com/stephenafamo/fakedb v0.0.0-20221230081958-0b86f816ed97/go.mod h1:bM3Vmw1IakoaXocHmMIGgJFYob0vuK+CFWiJHQvz0jQ=
-github.com/stephenafamo/scan v0.4.2 h1:mPmOjV84VCQdlYPPX1jZZHt5LYRHAPdEe/yuSaMi92Q=
-github.com/stephenafamo/scan v0.4.2/go.mod h1:FhIUJ8pLNyex36xGFiazDJJ5Xry0UkAi+RkWRrEcRMg=
+github.com/stephenafamo/scan v0.5.0 h1:1zDlY1PFnLB8MErWVil/vywAoZxGIdQS/y8nDiGU+/c=
+github.com/stephenafamo/scan v0.5.0/go.mod h1:FhIUJ8pLNyex36xGFiazDJJ5Xry0UkAi+RkWRrEcRMg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=

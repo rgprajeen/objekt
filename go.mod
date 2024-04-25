@@ -7,7 +7,7 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/zerolog v1.32.0
 	github.com/stephenafamo/bob v0.25.0
-	github.com/stephenafamo/scan v0.4.2
+	github.com/stephenafamo/scan v0.5.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
