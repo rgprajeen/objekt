@@ -15,6 +15,7 @@
 !.air.toml
 !.env
 !docker-compose.yml
+!Dockerfile.builder
 
 # !Makefile
 
