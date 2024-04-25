@@ -11,7 +11,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: rockylinux:9
+      image: rockylinux:8
     timeout-minutes: 5
     steps:
       - name: Set up Git
