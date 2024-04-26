@@ -4,7 +4,8 @@ on:
   push:
     branches: [master]
     paths:
-      - 'Dockerfile.builder'
+      - .github/workflows/builder-image.yml
+      - Dockerfile.builder
   pull_request:
     branches: [master]
 
