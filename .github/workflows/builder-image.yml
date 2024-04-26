@@ -15,11 +15,21 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     timeout-minutes: 5
     steps:
     - uses: actions/checkout@v4
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Docker meta
       id: meta
       uses: docker/metadata-action@v5
@@ -42,8 +52,11 @@ jobs:
       with:
         context: .
         file: ./Dockerfile.builder
+        platforms: ${{ matrix.platform }}
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        outputs: |
+          type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
         build-args: |
           GO_VERSION=${{ env.GO_VERSION }}

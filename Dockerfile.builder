@@ -10,8 +10,9 @@ ENV PATH="${PATH}:/usr/local/go/bin" \
 RUN dnf install -y git gzip wget && \
   dnf clean all && \
   rm -rf /var/lib/yum && \
+  arch=$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
   wget --progress=dot:mega -O go.tar.gz \
-    "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" && \
+    "https://go.dev/dl/go${GO_VERSION}.linux-${arch}.tar.gz" && \
   rm -rf /usr/local/go && tar -C /usr/local -xzf go.tar.gz && \
   rm go.tar.gz && \
   adduser -u 1000 -d /buildman buildman
