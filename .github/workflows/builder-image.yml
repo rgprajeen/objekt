@@ -19,12 +19,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
     timeout-minutes: 5
     steps:
     - uses: actions/checkout@v4
@@ -54,11 +48,9 @@ jobs:
       with:
         context: .
         file: ./Dockerfile.builder
-        platforms: ${{ matrix.platform }}
+        platforms: linux/amd64,linux/arm64
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        outputs: |
-          type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
         build-args: |
           GO_VERSION=${{ env.GO_VERSION }}
