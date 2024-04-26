@@ -38,7 +38,7 @@ jobs:
           org.opencontainers.image.title=objekt-builder
           org.opencontainers.image.description="Builder Image used in CI"
         images: |
-          ghcr.io/${{ github.actor }}/objekt/builder
+          ghcr.io/${{ github.repository }}/builder
         tags: |
           type=raw,value=latest,enable={{is_default_branch}}
     - name: Login to GitHub Container Registry
