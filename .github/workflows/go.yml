@@ -2,30 +2,25 @@ name: Go
 
 on:
   push:
-    branches: [master]
+    branches: ['**']
+    paths:
+      - .github/workflows/go.yml
+      - '**/*.go'
+      - go.mod
+      - go.sum
   pull_request:
-    branches: [master]
+    branches: ['master']
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: rockylinux:8
+      image: ghcr.io/upmahq/objekt/builder:latest
+      options: --user 1001 --workdir /buildman
     timeout-minutes: 5
     steps:
-      - name: Set up Git
-        run: |-
-          dnf install -y git-all
-          git config --global user.name "Github Actions Bot"
-          git config --global user.email "<>"
-          git config --global --add safe.directory $PWD
-          git --version
       - uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.22.x'
       - name: Go Format
         run: gofmt -s -w . && git diff --exit-code
       - name: Go Vet
