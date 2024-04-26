@@ -1,6 +1,6 @@
-encryptionsalt: v1:R+aBX5pMi08=:v1:4/IkOwkQKd3Tu/FY:XRcdJdDIiYHDgdaetCtMPLDI2TSk6w==
+encryptionsalt: v1:Df5EkAuSEeg=:v1:FPswm8svr3rSF/hu:LEM4Ag4aCIPOtie7Nl3xNjUjfEy2Mw==
 config:
-  aws:accessKey: AKIAZR5DBFANPIYUX3CX
-  aws:region: us-east-1
+  aws:accessKey: AKIAZR5DBFANL5KT47MM
+  aws:region: us-east-2
   aws:secretKey:
-    secure: v1:s+eWIK9GwFyRO55M:VpCgZ0rPlJGqhQQT0uauHXJ7wLr6ub/t2C14Vk0vMs/l9iAqCBfkR+f6Tcug4qJA0UlRUJO4D2g=
+    secure: v1:t5uhx5FKtP2X4oip:WMb+MULk4znb/UxPE2UrX1zGK05Ev69+lkKbzPAyyQ5tLu5UvvDpSoNdYFlc+d+drO0rZMb3pRw=
