@@ -19,12 +19,13 @@ func _() {
 	_ = x[BucketTypeInvalid-0]
 	_ = x[BucketTypeAWS-1]
 	_ = x[BucketTypeAzure-2]
-	_ = x[BucketTypeOCI-3]
+	_ = x[BucketTypeLocal-3]
+	_ = x[BucketTypeOCI-4]
 }
 
-const _BucketType_name = "invalidawsazureoci"
+const _BucketType_name = "invalidawsazurelocaloci"
 
-var _BucketType_index = [...]uint8{0, 7, 10, 15, 18}
+var _BucketType_index = [...]uint8{0, 7, 10, 15, 20, 23}
 
 func _() {
 	var _nil_BucketType_value = func() (val BucketType) { return }()
@@ -47,13 +48,14 @@ func (i BucketType) New() *BucketType {
 	return &clone
 }
 
-var _BucketType_values = []BucketType{0, 1, 2, 3}
+var _BucketType_values = []BucketType{0, 1, 2, 3, 4}
 
 var _BucketType_name_to_values = map[string]BucketType{
 	_BucketType_name[0:7]:   0,
 	_BucketType_name[7:10]:  1,
 	_BucketType_name[10:15]: 2,
-	_BucketType_name[15:18]: 3,
+	_BucketType_name[15:20]: 3,
+	_BucketType_name[20:23]: 4,
 }
 
 // ParseBucketTypeString retrieves an enum value from the enum constants string name.

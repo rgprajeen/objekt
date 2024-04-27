@@ -7,6 +7,7 @@ const (
 	BucketTypeInvalid BucketType = iota // invalid
 	BucketTypeAWS                       //aws
 	BucketTypeAzure                     // azure
+	BucketTypeLocal                     // local
 	BucketTypeOCI                       // oci
 )
 
@@ -19,6 +20,7 @@ const (
 	BucketRegionAPSouthEast2                     // ap-southeast-2
 	BucketRegionEUCentral1                       // eu-central-1
 	BucketRegionEUWest2                          // eu-west-2
+	BucketRegionLocal                            // local
 	BucketRegionUSEast1                          // us-east-1
 	BucketRegionUSWest1                          // us-west-1
 )
