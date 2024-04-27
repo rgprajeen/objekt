@@ -7,10 +7,11 @@ import (
 )
 
 type globalConfig struct {
-	Http           HttpConfig `embed:"" prefix:"http."`
-	StorageBackend string     `help:"Select the storage backend for data" enum:"memory,database" default:"memory"`
-	Log            LogConfig  `embed:"" prefix:"log."`
-	DB             DBConfig   `embed:"" prefix:"db."`
+	Http           HttpConfig  `embed:"" prefix:"http."`
+	StorageBackend string      `help:"Select the storage backend for data" enum:"memory,database" default:"memory"`
+	Log            LogConfig   `embed:"" prefix:"log."`
+	DB             DBConfig    `embed:"" prefix:"db."`
+	Local          LocalConfig `embed:"" prefix:"local."`
 }
 
 const (
