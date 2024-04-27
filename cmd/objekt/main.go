@@ -24,7 +24,7 @@ func main() {
 	var bucketRepo port.BucketRepository
 	var fileRepo port.FileRepository
 
-	if cliConfig.StorageBackend == config.StorageBackendDatabase {
+	if cliConfig.PersistenceMode == config.PersistenceModeDatabase {
 		db, err := postgres.NewDB(context.Background())
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to connect to database")
