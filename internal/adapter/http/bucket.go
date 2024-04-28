@@ -32,7 +32,7 @@ type createBucketRequest struct {
 
 func (h *BucketHandler) AddRoutes() {
 	h.router.GET("/buckets", h.ListBuckets)
-	h.router.POST("/buckets", h.CreateBucket)
+	h.router.POST("/buckets", contentTypeMiddleware(h.CreateBucket, []string{ContentTypeJSON}))
 	h.router.GET("/buckets/:bucket_id", h.GetBucket)
 	h.router.DELETE("/buckets/:bucket_id", h.DeleteBucket)
 }

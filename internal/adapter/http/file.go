@@ -32,7 +32,7 @@ type createFileRequest struct {
 }
 
 func (h *FileHandler) AddRoutes() {
-	h.router.POST("/files", h.CreateFile)
+	h.router.POST("/files", contentTypeMiddleware(h.CreateFile, []string{ContentTypeJSON}))
 	h.router.DELETE("/files/:id", h.DeleteFile)
 	h.router.GET("/files/:id", h.GetFile)
 	h.router.GET("/buckets/:bucket_id/files", h.GetFilesByBucketName)
