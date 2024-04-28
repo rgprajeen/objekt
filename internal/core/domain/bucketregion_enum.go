@@ -21,13 +21,14 @@ func _() {
 	_ = x[BucketRegionAPSouthEast2-2]
 	_ = x[BucketRegionEUCentral1-3]
 	_ = x[BucketRegionEUWest2-4]
-	_ = x[BucketRegionUSEast1-5]
-	_ = x[BucketRegionUSWest1-6]
+	_ = x[BucketRegionLocal-5]
+	_ = x[BucketRegionUSEast1-6]
+	_ = x[BucketRegionUSWest1-7]
 }
 
-const _BucketRegion_name = "invalidap-southeast-1ap-southeast-2eu-central-1eu-west-2us-east-1us-west-1"
+const _BucketRegion_name = "invalidap-southeast-1ap-southeast-2eu-central-1eu-west-2localus-east-1us-west-1"
 
-var _BucketRegion_index = [...]uint8{0, 7, 21, 35, 47, 56, 65, 74}
+var _BucketRegion_index = [...]uint8{0, 7, 21, 35, 47, 56, 61, 70, 79}
 
 func _() {
 	var _nil_BucketRegion_value = func() (val BucketRegion) { return }()
@@ -50,7 +51,7 @@ func (i BucketRegion) New() *BucketRegion {
 	return &clone
 }
 
-var _BucketRegion_values = []BucketRegion{0, 1, 2, 3, 4, 5, 6}
+var _BucketRegion_values = []BucketRegion{0, 1, 2, 3, 4, 5, 6, 7}
 
 var _BucketRegion_name_to_values = map[string]BucketRegion{
 	_BucketRegion_name[0:7]:   0,
@@ -58,8 +59,9 @@ var _BucketRegion_name_to_values = map[string]BucketRegion{
 	_BucketRegion_name[21:35]: 2,
 	_BucketRegion_name[35:47]: 3,
 	_BucketRegion_name[47:56]: 4,
-	_BucketRegion_name[56:65]: 5,
-	_BucketRegion_name[65:74]: 6,
+	_BucketRegion_name[56:61]: 5,
+	_BucketRegion_name[61:70]: 6,
+	_BucketRegion_name[70:79]: 7,
 }
 
 // ParseBucketRegionString retrieves an enum value from the enum constants string name.

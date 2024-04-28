@@ -99,5 +99,10 @@ func validateBucket(b *domain.Bucket) error {
 		return errors.New("invalid bucket type")
 	}
 
+	if (b.Type != domain.BucketTypeLocal && b.Region == domain.BucketRegionLocal) ||
+		(b.Type == domain.BucketTypeLocal && b.Region != domain.BucketRegionLocal) {
+		return fmt.Errorf("unsupported bucket region: %s for type: %s", b.Region, b.Type)
+	}
+
 	return nil
 }
