@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"strings"
+	"net/url"
 )
 
 type DBConfig struct {
@@ -15,23 +15,20 @@ type DBConfig struct {
 	AdditionalConfig map[string]string `help:"Additional database connection string query params"`
 }
 
-func (d *DBConfig) ConnectionURL() string {
-	baseURL := fmt.Sprintf("%s://%s:%s@%s:%d/%s",
-		d.Driver,
-		d.User,
-		d.Password,
-		d.Host,
-		d.Port,
-		d.Name,
-	)
-
-	if len(d.AdditionalConfig) == 0 {
-		return baseURL
+func (d *DBConfig) ConnectionURL() (string, error) {
+	baseURL, err := url.Parse(fmt.Sprintf("%s://%s:%d/%s",
+		d.Driver, d.Host, d.Port, url.PathEscape(d.Name)))
+	if err != nil {
+		return "", fmt.Errorf("malformed connection string: %v", err)
 	}
 
-	queryParams := make([]string, 0, len(d.AdditionalConfig))
+	baseURL.User = url.UserPassword(d.User, d.Password)
+
+	queryParams := url.Values{}
 	for k, v := range d.AdditionalConfig {
-		queryParams = append(queryParams, fmt.Sprintf("%s=%s", k, v))
+		queryParams.Add(k, v)
 	}
-	return fmt.Sprintf("%s?%s", baseURL, strings.Join(queryParams, "&"))
+	baseURL.RawQuery = queryParams.Encode()
+
+	return baseURL.String(), nil
 }

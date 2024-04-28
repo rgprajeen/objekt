@@ -14,7 +14,10 @@ type DB struct {
 }
 
 func NewDB(ctx context.Context) (*DB, error) {
-	connectionURL := config.Get().DB.ConnectionURL()
+	connectionURL, err := config.Get().DB.ConnectionURL()
+	if err != nil {
+		return nil, err
+	}
 	pool, err := pgxpool.New(ctx, connectionURL)
 	if err != nil {
 		return nil, err
