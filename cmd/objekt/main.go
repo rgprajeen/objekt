@@ -10,6 +10,7 @@ import (
 	m_repo "github.com/upmahq/objekt/internal/adapter/persistence/memory/repository"
 	"github.com/upmahq/objekt/internal/adapter/persistence/postgres"
 	p_repo "github.com/upmahq/objekt/internal/adapter/persistence/postgres/repository"
+	"github.com/upmahq/objekt/internal/adapter/storage"
 	"github.com/upmahq/objekt/internal/config"
 	"github.com/upmahq/objekt/internal/core/port"
 	"github.com/upmahq/objekt/internal/core/service"
@@ -37,7 +38,8 @@ func main() {
 		fileRepo = m_repo.NewFileRepository(bucketRepo)
 	}
 
-	bucketSvc := service.NewBucketService(log, bucketRepo, fileRepo)
+	storageRepoProvider := &storage.StorageRepositoryProvider{}
+	bucketSvc := service.NewBucketService(log, bucketRepo, fileRepo, storageRepoProvider)
 	fileSvc := service.NewFileService(log, bucketRepo, fileRepo)
 
 	router := httprouter.New()
