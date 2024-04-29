@@ -10,7 +10,7 @@ import (
 	"github.com/stephenafamo/bob/dialect/psql/im"
 	"github.com/stephenafamo/bob/dialect/psql/sm"
 	"github.com/stephenafamo/scan"
-	"github.com/upmahq/objekt/internal/adapter/storage/postgres"
+	"github.com/upmahq/objekt/internal/adapter/persistence/postgres"
 	"github.com/upmahq/objekt/internal/core/domain"
 	"github.com/upmahq/objekt/internal/core/port"
 )
