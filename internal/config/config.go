@@ -1,4 +1,4 @@
-package config
+package config // import github.com/upmahq/objekt/internal/config
 
 import (
 	"sync"
@@ -12,6 +12,7 @@ type globalConfig struct {
 	Log             LogConfig   `embed:"" prefix:"log."`
 	DB              DBConfig    `embed:"" prefix:"db."`
 	Local           LocalConfig `embed:"" prefix:"local."`
+	AWS             AWSConfig   `embed:"" prefix:"aws."`
 }
 
 const (

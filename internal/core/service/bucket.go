@@ -53,7 +53,7 @@ func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket)
 	if err != nil {
 		return nil, err
 	}
-	if err := storageRepo.CreateBucket(ctx, bucket.Name); err != nil {
+	if err := storageRepo.CreateBucket(ctx, bucket); err != nil {
 		s.log.Err(err).Msg("bucket creation failed")
 		return nil, fmt.Errorf("bucket creation failed: %v", err)
 	}
@@ -99,7 +99,7 @@ func (s *BucketService) DeleteBucket(ctx context.Context, id string) error {
 		return err
 	}
 
-	err = storageRepo.DeleteBucket(ctx, b.Name)
+	err = storageRepo.DeleteBucket(ctx, b)
 	if err != nil {
 		s.log.Err(err).Str("bucket_id", id).Msg("failed to delete bucket")
 		return err
