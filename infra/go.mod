@@ -6,7 +6,7 @@ toolchain go1.22.2
 
 require (
 	github.com/pulumi/pulumi-aws/sdk/v6 v6.32.0
-	github.com/pulumi/pulumi/sdk/v3 v3.114.0
+	github.com/pulumi/pulumi/sdk/v3 v3.115.2
 )
 
 require (
