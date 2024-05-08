@@ -150,6 +150,8 @@ github.com/pulumi/esc v0.6.2 h1:+z+l8cuwIauLSwXQS0uoI3rqB+YG4SzsZYtHfNoXBvw=
 github.com/pulumi/esc v0.6.2/go.mod h1:jNnYNjzsOgVTjCp0LL24NsCk8ZJxq4IoLQdCT0X7l8k=
 github.com/pulumi/pulumi-aws/sdk/v6 v6.33.1 h1:4K/QDh8O5E6J7C/Vb5FtNMOrXlptqSo5J3bRCed+4D8=
 github.com/pulumi/pulumi-aws/sdk/v6 v6.33.1/go.mod h1:TYjuCIsE/9yiC5gOiQbePfOmNXsP4CDSiFLlMcgXVlU=
+github.com/pulumi/pulumi-oci/sdk v1.34.0 h1:vhjiC0K3Zxz2VL1lZbcj5hN+oLBU2GBiRXV/rPjpJJA=
+github.com/pulumi/pulumi-oci/sdk v1.34.0/go.mod h1:GrMKGjN0HHJf0uLYoSqHyhUl2+7yof3p8evxySFCJyA=
 github.com/pulumi/pulumi/sdk/v3 v3.115.2 h1:CFx/KfS3fsp2EiXnX70JNUBvHADNqiQ617AVslu5I6E=
 github.com/pulumi/pulumi/sdk/v3 v3.115.2/go.mod h1:d6LZJHqEfpgXUd8rFSSsbaPJcocZObXeaUr87jbA5MY=
 github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
@@ -168,6 +170,8 @@ github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3/go.mod h1:A0bzQcvG
 github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/skeema/knownhosts v1.2.2 h1:Iug2P4fLmDw9f41PB6thxUkNUkJzB5i+1/exaj40L3A=
 github.com/skeema/knownhosts v1.2.2/go.mod h1:xYbVRSPxqBZFrdmDyMmsOs+uX1UZC3nTN3ThzgDxUwo=
+github.com/spf13/cast v1.4.1 h1:s0hze+J0196ZfEMTs80N7UlFt0BDuQ7Q+JDnHiMWKdA=
+github.com/spf13/cast v1.4.1/go.mod h1:Qx5cxh0v+4UWYiBimWS+eyWzqEqokIECu5etghLkUJE=
 github.com/spf13/cobra v1.7.0 h1:hyqWnYt1ZQShIddO5kBpj3vu05/++x6tJ6dg8EC572I=
 github.com/spf13/cobra v1.7.0/go.mod h1:uLxZILRyS/50WlhOIKD7W6V5bgeIt+4sICxh6uRMrb0=
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
