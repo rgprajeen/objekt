@@ -13,6 +13,7 @@ type globalConfig struct {
 	DB              DBConfig    `embed:"" prefix:"db."`
 	Local           LocalConfig `embed:"" prefix:"local."`
 	AWS             AWSConfig   `embed:"" prefix:"aws."`
+	OCI             OCIConfig   `embed:"" prefix:"oci."`
 }
 
 const (

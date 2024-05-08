@@ -5,6 +5,7 @@ import (
 
 	"github.com/attoleap/objekt/internal/adapter/storage/aws"
 	"github.com/attoleap/objekt/internal/adapter/storage/local"
+	"github.com/attoleap/objekt/internal/adapter/storage/oci"
 	"github.com/attoleap/objekt/internal/core/domain"
 	"github.com/attoleap/objekt/internal/core/port"
 )
@@ -20,6 +21,8 @@ func (s *StorageRepositoryProvider) Get(storageType domain.BucketType) (port.Sto
 		return &local.LocalStorageRepository{}, nil
 	case domain.BucketTypeAWS:
 		return aws.NewStorageRepository()
+	case domain.BucketTypeOCI:
+		return oci.NewOciStorageRepository()
 	default:
 		return nil, fmt.Errorf("unsupported storage type %s", storageType)
 	}
