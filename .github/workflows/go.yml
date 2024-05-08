@@ -16,7 +16,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/upmahq/objekt/builder:latest
+      image: ghcr.io/attoleap/objekt/builder:latest
       options: --user 1001 --workdir /buildman
     timeout-minutes: 5
     steps:
