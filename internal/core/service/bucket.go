@@ -13,9 +13,10 @@ import (
 )
 
 type BucketService struct {
-	log        *zerolog.Logger
-	bucketRepo port.BucketRepository
-	fileRepo   port.FileRepository
+	log                 *zerolog.Logger
+	bucketRepo          port.BucketRepository
+	fileRepo            port.FileRepository
+	storageRepoProvider port.StorageRepositoryProvider
 }
 
 var validBucketNameRegex = regexp.MustCompile(`^[a-zA-Z](-?[a-zA-Z0-9]{1,})*$`)
@@ -23,8 +24,13 @@ var validBucketNameRegex = regexp.MustCompile(`^[a-zA-Z](-?[a-zA-Z0-9]{1,})*$`)
 // interface guard
 var _ port.BucketService = (*BucketService)(nil)
 
-func NewBucketService(log *zerolog.Logger, bucketRepo port.BucketRepository, fileRepo port.FileRepository) *BucketService {
-	return &BucketService{log: log, bucketRepo: bucketRepo, fileRepo: fileRepo}
+func NewBucketService(log *zerolog.Logger, bucketRepo port.BucketRepository, fileRepo port.FileRepository, storageRepoProvider port.StorageRepositoryProvider) *BucketService {
+	return &BucketService{
+		log:                 log,
+		bucketRepo:          bucketRepo,
+		fileRepo:            fileRepo,
+		storageRepoProvider: storageRepoProvider,
+	}
 }
 
 func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket) (*domain.Bucket, error) {
@@ -41,6 +47,15 @@ func (s *BucketService) CreateBucket(ctx context.Context, bucket *domain.Bucket)
 		}
 		s.log.Error().Str("bucket_name", bucket.Name).Msg("bucket already exists")
 		return nil, errors.New("bucket already exists")
+	}
+
+	storageRepo, err := s.storageRepoProvider.Get(bucket.Type)
+	if err != nil {
+		return nil, err
+	}
+	if err := storageRepo.CreateBucket(ctx, bucket); err != nil {
+		s.log.Err(err).Msg("bucket creation failed")
+		return nil, fmt.Errorf("bucket creation failed: %v", err)
 	}
 
 	return s.bucketRepo.CreateBucket(ctx, bucket)
@@ -67,7 +82,7 @@ func (s *BucketService) DeleteBucket(ctx context.Context, id string) error {
 		return errors.New("invalid bucket ID")
 	}
 
-	_, err = s.bucketRepo.GetBucketByID(ctx, bucketID)
+	b, err := s.bucketRepo.GetBucketByID(ctx, bucketID)
 	if err != nil {
 		s.log.Err(err).Str("bucket_id", id).Msg("bucket not found")
 		return fmt.Errorf("failed to delete bucket: %w", err)
@@ -77,6 +92,17 @@ func (s *BucketService) DeleteBucket(ctx context.Context, id string) error {
 	if err != nil {
 		s.log.Err(err).Str("bucket_id", id).Msg("failed to delete files")
 		return fmt.Errorf("failed to delete files in bucket: %w", err)
+	}
+
+	storageRepo, err := s.storageRepoProvider.Get(b.Type)
+	if err != nil {
+		return err
+	}
+
+	err = storageRepo.DeleteBucket(ctx, b)
+	if err != nil {
+		s.log.Err(err).Str("bucket_id", id).Msg("failed to delete bucket")
+		return err
 	}
 
 	return s.bucketRepo.DeleteBucket(ctx, bucketID)
