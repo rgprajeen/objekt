@@ -6,9 +6,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/upmahq/objekt/internal/config"
-	"github.com/upmahq/objekt/internal/core/domain"
-	"github.com/upmahq/objekt/internal/core/port"
+	"github.com/attoleap/objekt/internal/config"
+	"github.com/attoleap/objekt/internal/core/domain"
+	"github.com/attoleap/objekt/internal/core/port"
 )
 
 type LocalStorageRepository struct{}

@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/attoleap/objekt/internal/config"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/pkgerrors"
-	"github.com/upmahq/objekt/internal/config"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 

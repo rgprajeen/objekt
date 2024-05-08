@@ -3,8 +3,8 @@ package port
 import (
 	"context"
 
+	"github.com/attoleap/objekt/internal/core/domain"
 	"github.com/google/uuid"
-	"github.com/upmahq/objekt/internal/core/domain"
 )
 
 // BucketRepository is an interface to interact with the storage layer

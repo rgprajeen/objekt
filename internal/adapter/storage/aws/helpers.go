@@ -1,8 +1,8 @@
-package aws // import github.com/upmahq/objekt/internal/adapter/storage/aws
+package aws // import github.com/attoleap/objekt/internal/adapter/storage/aws
 
 import (
+	"github.com/attoleap/objekt/internal/core/domain"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/upmahq/objekt/internal/core/domain"
 )
 
 var toS3LocationConstraint = map[domain.BucketRegion]types.BucketLocationConstraint{

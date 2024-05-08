@@ -3,7 +3,7 @@ package port
 import (
 	"context"
 
-	"github.com/upmahq/objekt/internal/core/domain"
+	"github.com/attoleap/objekt/internal/core/domain"
 )
 
 type StorageRepository interface {

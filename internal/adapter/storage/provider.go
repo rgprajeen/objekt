@@ -3,10 +3,10 @@ package storage
 import (
 	"fmt"
 
-	"github.com/upmahq/objekt/internal/adapter/storage/aws"
-	"github.com/upmahq/objekt/internal/adapter/storage/local"
-	"github.com/upmahq/objekt/internal/core/domain"
-	"github.com/upmahq/objekt/internal/core/port"
+	"github.com/attoleap/objekt/internal/adapter/storage/aws"
+	"github.com/attoleap/objekt/internal/adapter/storage/local"
+	"github.com/attoleap/objekt/internal/core/domain"
+	"github.com/attoleap/objekt/internal/core/port"
 )
 
 type StorageRepositoryProvider struct{}

@@ -3,6 +3,9 @@ package repository
 import (
 	"context"
 
+	"github.com/attoleap/objekt/internal/adapter/persistence/postgres"
+	"github.com/attoleap/objekt/internal/core/domain"
+	"github.com/attoleap/objekt/internal/core/port"
 	"github.com/google/uuid"
 	"github.com/stephenafamo/bob"
 	"github.com/stephenafamo/bob/dialect/psql"
@@ -10,9 +13,6 @@ import (
 	"github.com/stephenafamo/bob/dialect/psql/im"
 	"github.com/stephenafamo/bob/dialect/psql/sm"
 	"github.com/stephenafamo/scan"
-	"github.com/upmahq/objekt/internal/adapter/persistence/postgres"
-	"github.com/upmahq/objekt/internal/core/domain"
-	"github.com/upmahq/objekt/internal/core/port"
 )
 
 type FileRepository struct {

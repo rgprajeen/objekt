@@ -3,10 +3,10 @@ package postgres
 import (
 	"context"
 
+	"github.com/attoleap/objekt/internal/config"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/stephenafamo/bob"
-	"github.com/upmahq/objekt/internal/config"
 )
 
 type DB struct {

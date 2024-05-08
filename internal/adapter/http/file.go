@@ -1,13 +1,13 @@
-package http // import "github.com/upmahq/objekt/internal/adapter/http"
+package http // import "github.com/attoleap/objekt/internal/adapter/http"
 
 import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/attoleap/objekt/internal/core/domain"
+	"github.com/attoleap/objekt/internal/core/port"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/zerolog"
-	"github.com/upmahq/objekt/internal/core/domain"
-	"github.com/upmahq/objekt/internal/core/port"
 )
 
 type FileHandler struct {

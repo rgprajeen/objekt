@@ -1,4 +1,4 @@
-package config // import github.com/upmahq/objekt/internal/config
+package config // import github.com/attoleap/objekt/internal/config
 
 import (
 	"sync"

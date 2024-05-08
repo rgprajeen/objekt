@@ -1,13 +1,13 @@
-package aws // import github.com/upmahq/objekt/internal/adapter/storage/aws
+package aws // import github.com/attoleap/objekt/internal/adapter/storage/aws
 
 import (
 	"context"
 
+	cfg "github.com/attoleap/objekt/internal/config"
+	"github.com/attoleap/objekt/internal/core/port"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
-	cfg "github.com/upmahq/objekt/internal/config"
-	"github.com/upmahq/objekt/internal/core/port"
 )
 
 type AwsStorageRepository struct {

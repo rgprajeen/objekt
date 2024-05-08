@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/attoleap/objekt/internal/core/domain"
+	"github.com/attoleap/objekt/internal/core/port"
 	"github.com/google/uuid"
-	"github.com/upmahq/objekt/internal/core/domain"
-	"github.com/upmahq/objekt/internal/core/port"
 )
 
 type FileRepository struct {

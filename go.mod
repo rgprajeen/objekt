@@ -1,4 +1,4 @@
-module github.com/upmahq/objekt
+module github.com/attoleap/objekt
 
 go 1.22.2
 
