@@ -9,7 +9,7 @@ import (
 )
 
 func (o *OciStorageRepository) CreateBucket(ctx context.Context, bucket *domain.Bucket) error {
-	provider := o.provider
+	provider := o.GetConfigProvider(bucket.Region)
 	client, err := objectstorage.NewObjectStorageClientWithConfigurationProvider(provider)
 	if err != nil {
 		return err
@@ -39,7 +39,7 @@ func (o *OciStorageRepository) CreateBucket(ctx context.Context, bucket *domain.
 }
 
 func (o *OciStorageRepository) DeleteBucket(ctx context.Context, bucket *domain.Bucket) error {
-	provider := o.provider
+	provider := o.GetConfigProvider(bucket.Region)
 	client, err := objectstorage.NewObjectStorageClientWithConfigurationProvider(provider)
 	if err != nil {
 		return err
