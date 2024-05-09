@@ -9,6 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.11
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.53.1
 	github.com/julienschmidt/httprouter v1.3.0
+	github.com/oracle/oci-go-sdk/v49 v49.2.0
 	github.com/rs/zerolog v1.32.0
 	github.com/stephenafamo/bob v0.25.0
 	github.com/stephenafamo/scan v0.5.0
@@ -36,6 +37,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/qdm12/reprint v0.0.0-20200326205758-722754a53494 // indirect
+	github.com/sony/gobreaker v0.4.2-0.20210216022020-dd874f9dd33b // indirect
 	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
