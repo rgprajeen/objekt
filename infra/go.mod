@@ -4,7 +4,7 @@ go 1.22.3
 
 require (
 	github.com/pulumi/pulumi-aws/sdk/v6 v6.33.1
-	github.com/pulumi/pulumi/sdk/v3 v3.115.2
+	github.com/pulumi/pulumi/sdk/v3 v3.116.1
 )
 
 require github.com/spf13/cast v1.4.1 // indirect
@@ -60,7 +60,7 @@ require (
 	github.com/pkg/term v1.1.0 // indirect
 	github.com/pulumi/appdash v0.0.0-20231130102222-75f619a67231 // indirect
 	github.com/pulumi/esc v0.6.2 // indirect
-	github.com/pulumi/pulumi-oci/sdk v1.34.0
+	github.com/pulumi/pulumi-oci/sdk v1.38.0
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/sabhiram/go-gitignore v0.0.0-20210923224102-525f6e181f06 // indirect
