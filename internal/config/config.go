@@ -11,6 +11,7 @@ type globalConfig struct {
 	PersistenceMode string      `help:"Select the persistence mode for data" enum:"memory,database" default:"memory"`
 	Log             LogConfig   `embed:"" prefix:"log."`
 	DB              DBConfig    `embed:"" prefix:"db."`
+	Cache           CacheConfig `embed:"" prefix:"cache."`
 	Local           LocalConfig `embed:"" prefix:"local."`
 	AWS             AWSConfig   `embed:"" prefix:"aws."`
 	OCI             OCIConfig   `embed:"" prefix:"oci."`
