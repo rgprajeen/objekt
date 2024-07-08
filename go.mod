@@ -6,7 +6,7 @@ require (
 	github.com/alecthomas/kong v0.9.0
 	github.com/aws/aws-sdk-go-v2 v1.30.1
 	github.com/aws/aws-sdk-go-v2/config v1.27.23
-	github.com/aws/aws-sdk-go-v2/credentials v1.17.23
+	github.com/aws/aws-sdk-go-v2/credentials v1.17.24
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.56.1
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/oracle/oci-go-sdk/v49 v49.2.0
@@ -30,7 +30,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.11.15 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.17.12 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.22.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.26.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.26.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.30.1 // indirect
 	github.com/aws/smithy-go v1.20.3 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
