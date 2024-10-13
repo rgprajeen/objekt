@@ -12,7 +12,7 @@ require (
 	github.com/oracle/oci-go-sdk/v49 v49.2.0
 	github.com/rs/zerolog v1.33.0
 	github.com/stephenafamo/bob v0.27.1
-	github.com/stephenafamo/scan v0.5.0
+	github.com/stephenafamo/scan v0.6.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
