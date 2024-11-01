@@ -3,7 +3,7 @@ module objekt
 go 1.22.3
 
 require (
-	github.com/pulumi/pulumi-aws/sdk/v6 v6.55.0
+	github.com/pulumi/pulumi-aws/sdk/v6 v6.57.0
 	github.com/pulumi/pulumi/sdk/v3 v3.136.1
 )
 
