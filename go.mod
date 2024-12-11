@@ -38,9 +38,9 @@ require (
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/qdm12/reprint v0.0.0-20200326205758-722754a53494 // indirect
 	github.com/sony/gobreaker v0.4.2-0.20210216022020-dd874f9dd33b // indirect
-	golang.org/x/crypto v0.17.0 // indirect
-	golang.org/x/sync v0.6.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 )
 
 require (
@@ -49,5 +49,5 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	golang.org/x/sys v0.19.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
 )
